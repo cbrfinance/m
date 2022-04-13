@@ -75,7 +75,7 @@ export const Provider = ({ children }) => {
           console.log("hi")
           setnewNet(true)
     }
-    const stake = async (amount, setLoading) => {
+    const stake = async (amount, setLoading, setToastType) => {
         try {
             if (ethereum) {
               const stakeContract = createStakeContract();
@@ -85,9 +85,12 @@ export const Provider = ({ children }) => {
                 gasLimit: 482500
             });
             setLoading(true);
-            const receipt = await stake.wait()
-            console.log(receipt)
+            setToastType("submit")
+            await stake.wait()
             setLoading(false);
+            setToastType("success")
+
+
              {/* setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
         await transactionHash.wait();
@@ -100,21 +103,25 @@ export const Provider = ({ children }) => {
           } catch (error) {
             console.log("something went wrong!")
             setLoading(false);
+            setToastType("fail")
             console.log(error);
           }
     }
-    const unstake = async (amount, setLoading) => {
+    const unstake = async (amount, setLoading, setToastType) => {
         try {
             if (ethereum) {
               const stakeContract = createStakeContract();
               const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
-              const stake = await stakeContract.unstake(parsedAmount, {
+              const unstake = await stakeContract.unstake(parsedAmount, {
                 gasPrice: 750000000000,
                 gasLimit: 482500
             });
             setLoading(true);
-            await stake.wait()
+            setToastType("submit")
+            await unstake.wait()
             setLoading(false);
+            setToastType("success")
+
              {/* setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
         await transactionHash.wait();
@@ -125,6 +132,8 @@ export const Provider = ({ children }) => {
                 console.log("Ethereum is not present");
               }
           } catch (error) {
+            setLoading(false);
+            setToastType("fail")
             console.log(error);
           }
     }

@@ -5,11 +5,15 @@ import Toast from './Toast';
 import { Routes, Route } from 'react-router-dom';
 import {Context} from '../context/Context'
 import '../App.css';
+
 // 받을때 children 객체를 받는다.
 function Container({ active, setActive }) {
     const {connectWallet, currentAccount, setCBRs} = React.useContext(Context)
     const [userName, setUserName] = React.useState()
     const [showToast, setShowToast] = useState(true)
+    const [toastType, setToastType] = useState("welcome")
+
+    
 
     useEffect(() => {
         if (currentAccount) {
@@ -36,7 +40,9 @@ function Container({ active, setActive }) {
 					}} className="hover:bg-gray-300 cursor-pointer bg-slate-50 rounded-md w-10 h-10 px-4 px font-normal text-s">
                         
                     </div>
-                    {currentAccount ? (<div className="bg-slate-50 rounded-md p-2 px-4 px font-normal text-s">
+                    {currentAccount ? (<div onClick={() => {
+                            setShowToast(!showToast);
+                        }} className="bg-slate-50 rounded-md p-2 px-4 px font-normal text-s">
                         {userName}
                     </div>) : (<div onClick={() => {
                             connectWallet();
@@ -55,14 +61,14 @@ function Container({ active, setActive }) {
 			>
         
 				<Routes>
-					<Route path="/" element={<Stake setToast={setShowToast}/>} />
-					<Route path="/Stake" element={<Stake />} />
+					<Route path="/" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
+					<Route path="/Stake" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 					<Route path="/Bond" element={<Bond />} />
 				</Routes>
 
         
 			</div>
-            {showToast && <Toast/>}
+            {<Toast showToast={showToast} toastType={toastType}/>}
 		</div>
 	);
 }

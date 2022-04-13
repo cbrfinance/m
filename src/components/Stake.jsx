@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Context} from '../context/Context'
 import Loading from './Loading'
-function Stake(setShowToast) {
+function Stake({setShowToast, showToast, setToastType}) {
 
   
   const [first, setFirst] = useState(false);
@@ -17,13 +17,13 @@ function Stake(setShowToast) {
     }
     const _unstake = async () =>
     {
-        await unstake(stakeAmount, setLoading);
+        await unstake(stakeAmount, setLoading, setToastType);
         setStakeAmount('');
         getStakeInfo(setGenInfo, setIndInfo)
     }
     const _stake = async () =>
     {
-        await stake(stakeAmount, setLoading);
+        await stake(stakeAmount, setLoading, setToastType);
         setStakeAmount('');
         getStakeInfo(setGenInfo, setIndInfo)
     }
