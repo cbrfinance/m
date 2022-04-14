@@ -11,7 +11,7 @@ function Sidebar({active, setActive}) {
      <div onClick={(e)=>{setActive(!active); e.stopPropagation(); }} className={`fixed z-10 w-screen h-screen bg-black/60 backdrop-blur ${active ? 'opacity-100 ease-in' : 'w-0'} lg:relative lg:w-80`}>
 
        
-         <div id="sidebar" onClick={(e) => {e.stopPropagation();}} id="content" className={`p-4 font-bold fixed w-80 h-screen bg-slate-50 overflow-auto ${active ? 'shadow-xl shadow-black translate-x-0 ease-in' : '-translate-x-full ease-out'} duration-200 lg:relative lg:transform-none md:shadow-none`}
+         <div onClick={(e) => {e.stopPropagation();}} id="content" className={`p-4 font-bold fixed w-80 h-screen bg-slate-50 overflow-auto ${active ? 'shadow-xl shadow-black translate-x-0 ease-in' : '-translate-x-full ease-out'} duration-200 lg:relative lg:transform-none md:shadow-none`}
   			>
            {/*contents*/}
           <div className="h-60 w-full flex">

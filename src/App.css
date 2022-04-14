@@ -34,7 +34,4 @@ background: linear-gradient(0deg, rgba(214,208,208,1) 25%, rgba(144,162,167,1) 8
   font-family: 'Ubuntu', sans-serif;
 -webkit-overflow-scrolling: auto !important; /* 추가 */
 }
-#sidebar{
-  font-family: 'Ubuntu', sans-serif;
-  
-}
+

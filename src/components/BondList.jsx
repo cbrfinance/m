@@ -19,10 +19,12 @@ function BondList(pair) {
 						<img
 							className="w-9 h-9"
 							src={pair.token1img}
+                            alt="description of ge"
 						/>
 						<img
 							className="relative transform -translate-x-3 w-9 h-9"
 							src={pair.token2img}
+                            alt="description of e"
 						/>
 					</div>
 					<div className="text-left">
@@ -44,10 +46,12 @@ function BondList(pair) {
 						<img
 							className="w-9 h-9"
 							src={pair.token1img}
+                            alt="description of ge"
 						/>
 						<img
 							className="relative transform -translate-x-3 w-9 h-9"
 							src={pair.token2img}
+                            alt="description of ge"
 						/>
 					</div>
 					<div className="text-left">

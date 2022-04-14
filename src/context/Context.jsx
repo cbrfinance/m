@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import {stakingContractABI, stakingContractAddress, tokenContractABI, tokenContractAddress } from "../constant/Constant";
+import {stakingContractABI, stakingContractAddress, tokenContractAddress } from "../constant/Constant";
 
 export const Context = React.createContext();
 
@@ -17,11 +17,6 @@ const createStakeContract = () => {
   
 export const Provider = ({ children }) => {
     const [currentAccount, setCurrentAccount] = useState("")
-    const [genInfo, setGenInfo] = useState({})
-    const [indInfo, setIndInfo] = useState({})
-    const [myBalance, setMyBalance] = useState()
-    const [stakeAmount, setStakeAmount] = useState()
-    const [myRealBalance, setMyRealBalance] = useState()
     const [newNet, setnewNet] = useState(false);
     
     
@@ -91,11 +86,6 @@ export const Provider = ({ children }) => {
             setToastType("success")
 
 
-             {/* setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
-             setIsLoading(false);*/}
 
             }else {
                 console.log("Ethereum is not present");
@@ -122,11 +112,7 @@ export const Provider = ({ children }) => {
             setLoading(false);
             setToastType("success")
 
-             {/* setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
-             setIsLoading(false);*/}
+          
 
             }else {
                 console.log("Ethereum is not present");

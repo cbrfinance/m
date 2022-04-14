@@ -33,10 +33,11 @@ function BondModal(pair) {
 					</div>
 					<div>
 						<div className="flex items-center">
-							<img className="w-9 h-9" src={pair.token1img} />
+							<img className="w-9 h-9" src={pair.token1img} alt="description of ge"/>
 							<img
 								className="relative transform -translate-x-3 w-9 h-9"
 								src={pair.token2img}
+                                alt="description of ge"
 							/>
 							<p className="text-lg font-semibold -translate-x-2">
 								DAI-KLAY LP
