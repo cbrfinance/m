@@ -18,23 +18,23 @@ function Sidebar({active, setActive}) {
             <h3 className="m-auto text-6xl">COBRA</h3>
           </div>
           <ul className="gap-2 font-normal text-lg">
-          className={({ isActive }) => (isActive ? 'active' : 'inactive')}
-          <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 space-x-3 hover:bg-gray-200 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Bond'>
+          
+          <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Dashbord'>
                 <FontAwesomeIcon icon={faChartBar}/>
                 <li>Dashboard</li>
             </NavLink>
-            <NavLink className="flex items-center p-2 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}} to='/Bond'>
+            <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Bond'>
                 <FontAwesomeIcon icon={faClone}/>
                 <li>Bond</li>
             </NavLink>
-            <Link className="flex items-center p-2 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}} to='/Stake'>
+            <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Stake'>
                 <FontAwesomeIcon icon={faLayerGroup}/>
                 <li>Stake</li>
-            </Link>
-            <Link className="flex items-center p-2 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}} to='/Stake'>
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Zap'>
                 <FontAwesomeIcon icon={faBolt}/>
                 <li>zap</li>
-            </Link>
+            </NavLink>
           </ul>
            <div className="my-5 border-solid border-1 border-t border-gray-300"></div>
 
