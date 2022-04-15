@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {Context} from '../context/Context'
+import Skel from './Skel'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import Loading from './Loading'
-function Stake({setShowToast, showToast, setToastType}) {
+function Stake({setToastType}) {
 
   
   const [first, setFirst] = useState(false);
@@ -10,6 +12,7 @@ function Stake({setShowToast, showToast, setToastType}) {
   const [indInfo, setIndInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [stakeMenu, setStakeMenu] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
   const {getStakeInfo, stake, unstake, currentAccount, newNet} = React.useContext(Context)
   
     const onStakeChange = (e) => {
@@ -27,8 +30,13 @@ function Stake({setShowToast, showToast, setToastType}) {
         setStakeAmount('');
         getStakeInfo(setGenInfo, setIndInfo)
     }
+    const _getStakeInfo = async () =>
+    {
+        await getStakeInfo(setGenInfo, setIndInfo)
+        setLoadingData(false);
+    }
    useEffect(() => {
-    getStakeInfo(setGenInfo, setIndInfo)
+    _getStakeInfo()
     setFirst(true)
   }, [getStakeInfo, newNet]);
 
@@ -48,17 +56,19 @@ function Stake({setShowToast, showToast, setToastType}) {
 					<div className="flex flex-col items-center gap-y-2 md:flex-row md:justify-around md:w-full">
 						<div className="flex flex-col items-center md:flex-1 ">
 							<p className="font-normal text-xl text-gray-500">Round</p>
-							<p className="font-bold text-lg">{genInfo.round}</p>
+                    
+							<p className="font-bold text-lg"> {loadingData ? <Skel/> : genInfo.round}</p>
 						</div>
 						<div className="flex flex-col items-center md:flex-1 ">
 							<p className="font-normal text-xl text-center text-gray-500">
 								Total Value Deposited
 							</p>
-							<p className="font-bold text-lg">{genInfo.totalSupply} sCBR</p>
+							<p className="font-bold text-lg">{loadingData ? <Skel/> : genInfo.totalSupply} sCBR</p>
 						</div>
 						<div className="flex flex-col items-center md:flex-1 ">
 							<p className="font-normal text-xl text-gray-500">Current Index</p>
-							<p className="font-bold text-lg">{genInfo.index} sCBR</p>
+							<p className="font-bold text-lg">{loadingData ? <Skel/> : genInfo.index} sCBR</p>
+                        
 						</div>
 					</div>
 					<div className="flex flex-col items-center">
@@ -104,29 +114,29 @@ function Stake({setShowToast, showToast, setToastType}) {
     
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Unstaked Balance</p>
-          <p className="text-gray-500">{indInfo.CBRBalance} CBR</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.CBRBalance} CBR</p>
         </div>
         
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Total Staked Balance</p>
-          <p className="text-gray-500">{indInfo.sCBRBalance} sCBR</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
         </div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>My round</p>
-          <p className="text-gray-500">{indInfo.indRound}</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.indRound}</p>
         </div>
         <div className="my-5 border-solid border-1 border-t border-gray-400 w-full max-w-md"></div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Next Reward Amount</p>
-          <p className="text-gray-500">{(((indInfo.sCBRBalance) * genInfo.rate / 100)).toFixed(4)} CBR</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : (((indInfo.sCBRBalance) * genInfo.rate / 100)).toFixed(4)} CBR</p>
         </div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Next Reward Yield</p>
-          <p className="text-gray-500">{genInfo.rate} %</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : genInfo.rate} %</p>
         </div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>ROI (5-Day Rate)</p>
-          <p className="text-gray-500">{genInfo.roi} %</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : genInfo.roi} %</p>
         </div>
 			</div>
 		</div>
