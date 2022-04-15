@@ -4,11 +4,14 @@ import Bond from './Bond';
 import Toast from './Toast';
 import { Routes, Route } from 'react-router-dom';
 import {Context} from '../context/Context'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faPlus, faCoins, faBars} from "@fortawesome/free-solid-svg-icons";
+import {} from "@fortawesome/free-regular-svg-icons";
 import '../App.css';
 
 // 받을때 children 객체를 받는다.
 function Container({ active, setActive }) {
-    const {connectWallet, currentAccount, setCBRs} = React.useContext(Context)
+    const {connectWallet, currentAccount, setCBR, setsCBR} = React.useContext(Context)
     const [userName, setUserName] = React.useState()
     const [showToast, setShowToast] = useState(true)
     const [toastType, setToastType] = useState("welcome")
@@ -33,25 +36,44 @@ function Container({ active, setActive }) {
 					onClick={() => {
 						setActive(!active);
 					}}
-					className="bg-slate-50 w-10 h-10 rounded-md"
-				/>
+					className="bg-slate-50 shadow-lg bg-opacity-50 cursor-pointer flex items-center justify-center hover:bg-slate-200 w-10 h-10 rounded-md"
+				>
+                    <FontAwesomeIcon className="text-xl" icon={faBars}/>
+                </div>
                 <div className="flex space-x-2 items-center">
                     <div onMouseEnter={() => setTokenMenu(true)}
-        onMouseLeave={() => setTokenMenu(false)}onClick={() => {
-						setCBRs();
-					}} className="hover:bg-slate-200 cursor-pointer bg-slate-50 rounded-md w-10 h-10 px-4 px font-normal text-s bg-opacity-50">
-                        <div className={`${!tokenMenu && "invisible opacity-0"} transition-all duration-500 absolute -translate-x-4 translate-y-11 rounded-md z-20 h-40 w-24 bg-white bg-opacity-50`}>
+        onMouseLeave={() => setTokenMenu(false)} className="shadow-lg hover:bg-slate-200 cursor-pointer bg-slate-50 space-x-1 rounded-md p-2 h-10 flex items-center justify-center font-normal text-xl bg-opacity-50">
+                        <FontAwesomeIcon className="text-xs" icon={faPlus}/> <FontAwesomeIcon icon={faCoins}/>
+                        <div className={`${!tokenMenu && "invisible opacity-0"} shadow-lg transition-all duration-500 absolute translate-y-24 rounded-md z-20 w-36 bg-white bg-opacity-95`}>
+                            
+                            <div className="text-xl p-2">
+                                <div className="flex justify-around items-center p-2 rounded-lg hover:bg-slate-200 hover:text-slate-600">
+                                    <FontAwesomeIcon icon={faCoins}/>
+                                    <p className="text-base font-normal">Get CBR</p>
+                                </div>
+                                <div onClick={()=>{setCBR()}} className="flex justify-around items-center p-2 rounded-lg hover:text-slate-600 hover:bg-slate-200">
+                                    <FontAwesomeIcon icon={faCoins}/>
+                                    <p className="text-base font-normal">Add CBR</p>
+                                </div>
+                                <div onClick={()=>{setsCBR()}} className="flex justify-around items-center p-2 rounded-lg hover:text-slate-600 hover:bg-slate-200">
+                                    <FontAwesomeIcon  icon={faCoins}/>
+                                    <p className="text-base font-normal">Add sCBR</p>
+                                </div>
+                            </div>
+                            <div>
+                                
+                            </div>
 
                         </div>
                         
                     </div>
                     {currentAccount ? (<div onClick={() => {
                             setShowToast(!showToast);
-                        }} className="bg-slate-50 rounded-md p-2 px-4 px font-normal text-gray-700 text-s bg-opacity-50">
+                        }} className="bg-slate-50 rounded-md p-2 px-4 px font-normal text-gray-700 text-s shadow-lg bg-opacity-50">
                         {userName}
                     </div>) : (<div onClick={() => {
                             connectWallet();
-                        }} className="hover:bg-slate-300 cursor-pointer bg-slate-50 h-10 rounded-md p-2 px-4 px font-normal text-s opacity-25">
+                        }} className="hover:bg-slate-300 cursor-pointer h-10 rounded-md p-2 px-4 bg-slate-50 shadow-lg font-normal text-s bg-opacity-50">
                         Connect
                     </div>)}
                                     

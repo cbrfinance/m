@@ -22,7 +22,7 @@ export const Provider = ({ children }) => {
     
     
    
-    const setCBRs = async () => {
+    const setCBR = async () => {
         await window.ethereum.request({
             method: 'wallet_watchAsset',
             params: {
@@ -35,7 +35,10 @@ export const Provider = ({ children }) => {
               },
             },
           });
-         await window.ethereum.request({
+    }
+    
+    const setsCBR = async () => {
+        await window.ethereum.request({
             method: 'wallet_watchAsset',
             params: {
               type: 'ERC20', // Initially only supports ERC20, but eventually more!
@@ -47,9 +50,8 @@ export const Provider = ({ children }) => {
               },
             },
           });
-          
     }
-
+    
     const setNetwork = async () => {
         await window.ethereum.request({
             method: "wallet_addEthereumChain",
@@ -197,7 +199,8 @@ export const Provider = ({ children }) => {
            currentAccount,
            getStakeInfo,
            setNetwork,
-           setCBRs,
+           setCBR,
+           setsCBR,
            stake,
            unstake,
            newNet,

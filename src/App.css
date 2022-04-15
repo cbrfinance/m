@@ -15,6 +15,37 @@ background: linear-gradient(0deg, rgba(214,208,208,1) 25%, rgba(144,162,167,1) 8
     animation: spin 1s linear infinite;
     margin: 20px;
   }
+  #firstLoading {
+    width: 2.5em;
+    height: 3em;
+    border: 3px solid transparent;
+    border-top-color: #fc2f70;
+    border-bottom-color: #fc2f70;
+    border-radius: 50%;
+    animation: spin-stretch 2s ease infinite;
+  }
+  
+  @keyframes spin-stretch {
+    50% {
+      transform: rotate(360deg) scale(0.4, 0.33);
+      border-width: 8px;
+    }
+    100% {
+      transform: rotate(720deg) scale(1, 1);
+      border-width: 3px;
+    }
+  }
+  
+  
+  @keyframes fill {
+    25%,
+    50% {
+      transform: scaleY(0);
+    }
+    100% {
+      transform: scaleY(1);
+    }
+  }
   
   #skel{
     
