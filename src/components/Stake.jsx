@@ -12,7 +12,7 @@ function Stake({setToastType}) {
   const [loading, setLoading] = useState(false);
   const [stakeMenu, setStakeMenu] = useState(true);
   const [loadingData, setLoadingData] = useState(true);
-  const {getStakeInfo, stake, unstake, currentAccount, newNet} = React.useContext(Context)
+  const {getStakeInfo, stake, unstake, currentAccount, newNet, connectWallet} = React.useContext(Context)
   
     const onStakeChange = (e) => {
         setStakeAmount(e.target.value);
@@ -70,8 +70,8 @@ function Stake({setToastType}) {
                         
 						</div>
 					</div>
-					<div className="flex flex-col items-center">
-                        {!currentAccount && (<><div className="bg-slate-400 py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
+					<div onClick={()=>{connectWallet()}} className="cursor-pointer flex flex-col items-center">
+                        {!currentAccount && (<><div className="bg-slate-400 hover:bg-slate-500 transition-all duration-200 hover:text-black py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
 							Connect Wallet
 						</div>
 						<p className="font-light text-sm">
