@@ -73,8 +73,8 @@ function Container({ active, setActive }) {
                         {userName}
                     </div>) : (<div onClick={() => {
                             connectWallet();
-                        }} className="hover:bg-slate-300 cursor-pointer flex items-center space-x-2 h-10 rounded-md p-2 px-4 bg-slate-50 shadow-lg font-normal text-s bg-opacity-50">
-                        <img className="w-7" alt="" src="img/wallet2.svg"/> <p>Connect</p>
+                        }} className="hover:bg-slate-300 cursor-pointer flex items-center space-x-2 h-10 rounded-md p-2 bg-slate-50 shadow-lg font-normal text-s bg-opacity-50">
+                        <img className="w-10" alt="" src="img/wallet3.svg"/>
                     </div>)}
                                     
                 </div>
