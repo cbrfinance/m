@@ -56,17 +56,17 @@ function Stake({setToastType}) {
 					<div className="flex flex-col items-center gap-y-3 md:flex-row md:justify-around md:w-full">
 						<div className="flex flex-col -space-y-1 items-center md:flex-1 ">
 							<p className="font-normal text-xl text-gray-500">Round</p>
-							<p className="font-bold text-lg"> {loadingData ? <Skel/> : genInfo.round}</p>
+							<p className="font-bold text-lg"> {loadingData || !currentAccount ? <Skel/> : genInfo.round}</p>
 						</div>
 						<div className="flex flex-col -space-y-1 items-center md:flex-1 ">
 							<p className="font-normal text-xl text-gray-500">
 								Total Value Deposited
 							</p>
-							<p className="font-bold text-lg">{loadingData ? <Skel/> : genInfo.totalSupply} sCBR</p>
+							<p className="font-bold text-lg">{loadingData || !currentAccount  ? <Skel/> : genInfo.totalSupply} sCBR</p>
 						</div>
 						<div className="flex flex-col -space-y-1 items-center md:flex-1 ">
 							<p className="font-normal text-xl text-gray-500">Current Index</p>
-							<p className="font-bold text-lg">{loadingData ? <Skel/> : genInfo.index} sCBR</p>
+							<p className="font-bold text-lg">{loadingData || !currentAccount  ? <Skel/> : genInfo.index} sCBR</p>
                         
 						</div>
 					</div>

@@ -5,7 +5,7 @@ import Toast from './Toast';
 import { Routes, Route } from 'react-router-dom';
 import {Context} from '../context/Context'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {faPlus, faCoins, faBars} from "@fortawesome/free-solid-svg-icons";
+import {faCoins, faBars} from "@fortawesome/free-solid-svg-icons";
 import {} from "@fortawesome/free-regular-svg-icons";
 import '../App.css';
 
@@ -43,7 +43,7 @@ function Container({ active, setActive }) {
                 <div className="flex space-x-2 items-center">
                     <div onMouseEnter={() => setTokenMenu(true)}
         onMouseLeave={() => setTokenMenu(false)} className="shadow-lg hover:bg-slate-200 cursor-pointer bg-slate-50 space-x-1 rounded-md p-2 h-10 flex items-center justify-center font-normal text-xl bg-opacity-50">
-                        <FontAwesomeIcon className="text-xs" icon={faPlus}/> <FontAwesomeIcon icon={faCoins}/>
+                        <img className="w-8" alt="" src="img/token.svg"/>
                         <div className={`${!tokenMenu && "invisible opacity-0"} shadow-lg transition-all duration-500 absolute translate-y-24 rounded-md z-20 w-36 bg-white bg-opacity-95`}>
                             
                             <div className="text-xl p-2">
