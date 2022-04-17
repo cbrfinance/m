@@ -69,8 +69,8 @@ function Container({ active, setActive }) {
                     </div>
                     {currentAccount ? (<div onClick={() => {
                             setShowToast(!showToast);
-                        }} className="bg-slate-50 rounded-md p-2 px-4 px font-normal text-gray-700 text-s shadow-lg bg-opacity-50">
-                        {userName}
+                        }} className="bg-slate-50 rounded-md p-2 px-4 flex space-x-2 px font-normal text-gray-700 text-s shadow-lg bg-opacity-50">
+                        <img className="w-5" alt="" src="img/metamask.svg"/><p>{userName}</p>
                     </div>) : (<div onClick={() => {
                             connectWallet();
                         }} className="hover:bg-slate-300 cursor-pointer flex items-center space-x-2 h-10 rounded-md p-2 bg-slate-50 shadow-lg font-normal text-s bg-opacity-50">
