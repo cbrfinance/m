@@ -90,14 +90,14 @@ function Stake({setToastType}) {
 					<p onClick={()=>{setStakeMenu(true); setStakeAmount('');}} className={`border-b-4  cursor-pointer hover:text-gray-400 ${stakeMenu ? 'border-slate-600 font-bold' : 'border-gray-100'}`}>Stake</p>
 					<p onClick={()=>{setStakeMenu(false); setStakeAmount('');}} className={`border-b-4 cursor-pointer hover:text-gray-400 ${!stakeMenu ? 'border-slate-600 font-bold' : 'border-gray-100'}`}>Unstake</p>
 				</div>
-                <div className="w-full h-10 px-3 py-1 flex bg-gray-300 items-center rounded-lg mt-4 max-w-md m-auto hover:border border-solid border-0 border-indigo-300">
+                <div className="w-full h-12 px-3 py-1 flex bg-gray-300 items-center rounded-lg mt-4 max-w-md m-auto hover:border-gray-600 border-solid border border-gray-300">
                     <input
                         placeholder={`Amount(${!stakeMenu ? 's' : ''}CBR)`}
                         type="number"
                         step="0.0001"
                         value={stakeAmount}
                         onChange={(e) => onStakeChange(e)}
-                        className="outline-none placeholder-slate-700 bg-gray-300 h-full w-1 flex-grow"
+                        className="outline-none text-2xl text-gray-600 placeholder-slate-400 placeholder-font-light bg-gray-300 h-full w-1 flex-grow"
                     />
 					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.rCBRBalance) : setStakeAmount(indInfo.rsCBRBalance)}} className="text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
 				</div>

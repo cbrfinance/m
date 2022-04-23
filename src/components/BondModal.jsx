@@ -43,14 +43,14 @@ function BondModal(pair) {
                         <p className="text-slate-500 text-sm mb-5">
                             Important: Recommended slippage is 1-5% to avoid a failed transaction.
                         </p>
-                        <div className="w-full h-12 rounded-md flex items-center text-2xl bg-gray-200 px-6">
+                        <div className="w-full rounded-md h-12 hover:rounded-md flex items-center text-2xl bg-gray-200 px-6 hover:border-gray-600 border-solid border border-gray-300">
                             <input
                                 placeholder=""
                                 type="number"
                                 step="0.1"
                                 value={slippage}
                                 onChange={(e) => onSlippageChange(e)}
-                                className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-12 w-1 flex-grow"
+                                className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-full w-1 flex-grow"
                             />
                             <p className="pl-2 text-gray-600 bg-gray-200">%</p>
                         </div>
