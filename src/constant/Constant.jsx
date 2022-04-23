@@ -9,7 +9,7 @@
     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
 */
 
-export const stakingContractAddress = '0x2fF51fea7732cF10eAcEB24051C1abFBf5f00043'
+export const stakingContractAddress = '0x4593848C2B7c21F7ED3A9aa6f00CDE1B238F63AD'
 export const tokenContractAddress = '0x225c04fF96C776B5BC34e26D2Ce994a815355e9C'
 export const stakingContractABI = [
 	{
@@ -107,6 +107,11 @@ export const stakingContractABI = [
 					{
 						"internalType": "uint256",
 						"name": "rIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rSecondLeft",
 						"type": "uint256"
 					},
 					{

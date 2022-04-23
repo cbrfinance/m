@@ -22,6 +22,7 @@ contract Stake{
         uint256 rRound;
         uint256 rTotalSupply;
         uint256 rIndex;
+        uint256 rSecondLeft;
         uint256 rate;
     }
 
@@ -37,8 +38,8 @@ contract Stake{
     /************BACK END DATA*************/
     uint256 internal INDEX; // Index Gons - tracks rebase growth
 
-    uint256 roundStartTime = 1649554200;
-    uint256 roundDuration = 300;
+    uint256 roundStartTime = 1650553200;
+    uint256 roundDuration = 28800;
     uint256 lastUpdateRound = 1;
     uint256 currentRate = 10030;
     uint256 private _gonsPerFragment;
@@ -92,7 +93,9 @@ contract Stake{
     {
         return ((block.timestamp - roundStartTime) / roundDuration + 1);
     }
-
+    function rSecondLeft() internal view returns(uint256){
+        return roundDuration - ((block.timestamp - roundStartTime) % roundDuration);
+    }
     function rFragment() internal view returns(uint256) {
 
         uint256 roundDiff = rRound() - lastUpdateRound;
@@ -156,6 +159,7 @@ contract Stake{
         frontGenInfo.rRound = rRound();
         frontGenInfo.rTotalSupply = totalSupply();
         frontGenInfo.rIndex = rIndex();
+        frontGenInfo.rSecondLeft = rSecondLeft();
         frontGenInfo.rate = currentRate;
 
         return(frontGenInfo);

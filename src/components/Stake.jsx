@@ -41,18 +41,21 @@ function Stake({setToastType}) {
     setFirst(true)
   }, [getStakeInfo, newNet]);
 
-  console.log(genInfo)
-  console.log(indInfo)
+
 	return (
 		<div className="p-1 flex space-y-4 flex-col">
 			<div className={`w-full p-4 bg-gray-100 rounded-lg max-w-3xl m-auto ${first? 'scale-100' : 'scale-0'} transition-all duration-700`}>
-				<div>
-					<h2 className="font-extrabold text-lg">Single Stake (3,3)</h2>
-					<h4 className="font-thin text-xs mb-4">
-						<span className="font-semibold">5hrs, 34mins</span> to next rebase
-					</h4>
-				</div>
-
+                <div className="w-full flex justify-between items-center mb-4">
+                    <div>
+                        <h2 className="font-extrabold text-lg">Single Stake (3,3)</h2>
+                        <h4 className="font-thin text-xs">
+                            <span className="font-semibold">{genInfo.secondLeft}</span> to next rebase
+                        </h4>
+                    </div>
+                    <div className="bg-gray-300 rounded-xl w-48 p-1 h-7 shadow-lg">
+                        <div className="w-full scale-x-50 origin-left h-5 rounded-xl bg-gray-100"></div>
+                    </div>
+                </div>
 				<div className="flex flex-col items-center gap-y-3">
 					<div className="flex flex-col items-center gap-y-3 md:flex-row md:justify-around md:w-full">
 						<div className="flex flex-col -space-y-1 items-center md:flex-1 ">

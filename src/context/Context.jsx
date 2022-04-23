@@ -171,9 +171,10 @@ export const Provider = ({ children }) => {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const stakeGenContract = new ethers.Contract(stakingContractAddress, stakingContractABI, provider);
             const stakeContract = createStakeContract();
-            
-            const [_round, _totalSupply, _index, _rate] = await stakeGenContract.getFrontGenInfo();
-            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
+            const a = await stakeGenContract.getFrontGenInfo();
+            console.log(a);
+            const [_round, _totalSupply, _index, _secondLeft, _rate] = await stakeGenContract.getFrontGenInfo();
+            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), secondLeft : _secondLeft.toNumber(), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
             setGenInfo(genInfo)
             const [_indRound, _sCBRBalance, _CBRBalance] = await stakeContract.getFrontIndInfo();
             const indInfo = {indRound : ethers.utils.formatUnits(_indRound, 0), sCBRBalance : convert(_sCBRBalance), CBRBalance : convert(_CBRBalance), rCBRBalance : (+ethers.utils.formatUnits(_CBRBalance, 9)), rsCBRBalance :(+ethers.utils.formatUnits(_sCBRBalance, 9)) }
