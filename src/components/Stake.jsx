@@ -100,7 +100,7 @@ function Stake({setToastType}) {
                         onChange={(e) => onStakeChange(e)}
                         className="outline-none text-xl text-gray-600 placeholder-slate-400 placeholder-font-light bg-gray-300 h-full w-1 flex-grow"
                     />
-					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.rCBRBalance) : setStakeAmount(indInfo.rsCBRBalance)}} className="text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
+					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.rCBRBalance) : setStakeAmount(indInfo.rsCBRBalance)}} className="ml-2 text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
 				</div>
                 {loading?(<Loading className="m-4"/>) : (<div onClick={()=>{stakeMenu? _stake() : _unstake()}} className="text-center transition-all duration-200 hover:bg-slate-500 hover:text-black cursor-pointer bg-slate-400 py-3 px-12 text-white text-lg font-normal mt-4 rounded-lg">
 							{stakeMenu? 'Stake' : 'Unstake'}

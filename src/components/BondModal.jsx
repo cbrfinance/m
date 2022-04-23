@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {faX, faGear} from "@fortawesome/free-solid-svg-icons";
+import {faX, faGear, faArrowDown} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {Context} from '../context/Context'
 
@@ -36,7 +36,7 @@ function BondModal(pair) {
                 <>
                     <div className="flex justify-between items-center p-5">
                         <div  />
-                        <p>Adjust Slippage</p>
+                        <p className="font-semibold">Adjust Slippage</p>
                         <FontAwesomeIcon icon={faX} onClick={()=>{setSetting(false)}} className="cursor-pointer hover:text-slate-400"/>
                     </div>
                     <div className="px-5 flex flex-col items-center w-full">
@@ -115,6 +115,33 @@ function BondModal(pair) {
 							Connect your wallet to bond
                            
 						</p></>)}
+                        <div className="flex flex-col items-center w-full">
+                            <div className="mt-4 mb-1 w-full rounded-lg h-14 max-w-sm hover:rounded-md flex items-center text-2xl bg-gray-200 px-6 hover:border-gray-400 border-solid border border-gray-200">
+                                <input
+                                    placeholder=""
+                                    type="number"
+                                    step="0.1"
+                                    value={slippage}
+                                    onChange={(e) => onSlippageChange(e)}
+                                    className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-full w-1 flex-grow"
+                                />
+                                <p className="pl-2 text-sm text-gray-600 bg-gray-200">LP</p>
+                            </div>
+                            <div className="flex text-xs items-center justify-center absolute top-1/2 h-7 w-7 rounded-xl bg-gray-200 border-solid border-4 border-gray-100">
+                                <FontAwesomeIcon icon={faArrowDown}/>
+                            </div>
+                            <div className="w-full rounded-lg h-14 max-w-sm flex items-center text-2xl bg-gray-200 px-6 hover:border-gray-400 border-solid border border-gray-200">
+                                <input
+                                    placeholder=""
+                                    type="number"
+                                    step="0.1"
+                                    value={slippage}
+                                    onChange={(e) => onSlippageChange(e)}
+                                    className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-full w-1 flex-grow"
+                                />
+                                <p className="pl-2 text-sm text-gray-600 bg-gray-200">SCBR</p>
+                            </div>
+                        </div>
                         <div className="flex flex-col space-y-2 w-full p-4 text-sm">
                             <div className="flex justify-between">
                                 <p>Your Balance</p>
