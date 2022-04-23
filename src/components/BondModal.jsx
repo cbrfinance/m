@@ -115,7 +115,7 @@ function BondModal(pair) {
 							Connect your wallet to bond
                            
 						</p></>)}
-                        <div className="flex flex-col items-center w-full">
+                        <div className="relative flex flex-col items-center w-full">
                             <div className="mt-4 mb-1 w-full rounded-lg h-14 max-w-sm hover:rounded-md flex items-center text-2xl bg-gray-200 px-6 hover:border-gray-400 border-solid border border-gray-200">
                                 <input
                                     placeholder=""
@@ -127,7 +127,7 @@ function BondModal(pair) {
                                 />
                                 <p className="pl-2 text-sm text-gray-600 bg-gray-200">LP</p>
                             </div>
-                            <div className="flex text-xs items-center justify-center absolute top-1/2 h-7 w-7 rounded-xl bg-gray-200 border-solid border-4 border-gray-100">
+                            <div className="absolute inset-0 top-1/2 -translate-y-1 left-1/2 -translate-x-1/2 flex text-xs items-center justify-center h-7 w-7 rounded-xl bg-gray-200 border-solid border-4 border-gray-100">
                                 <FontAwesomeIcon icon={faArrowDown}/>
                             </div>
                             <div className="w-full rounded-lg h-14 max-w-sm flex items-center text-2xl bg-gray-200 px-6 hover:border-gray-400 border-solid border border-gray-200">
