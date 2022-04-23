@@ -28,7 +28,7 @@ function Container({ active, setActive }) {
 
 
 	return (
-		<div onClick={e => {e.stopPropagation();}} id="container" className="fixed z-10 overflow-hidden inset-0 pt-14 md:pt-20 w-full h-full bg-green-100 md:relative md:w-0 md:flex-grow">
+		<div onClick={e => {e.stopPropagation();}} id="container" className="fixed z-20 overflow-hidden inset-0 pt-14 md:pt-20 w-full h-full bg-green-100 md:relative md:w-0 md:flex-grow">
       
 			{/*navbar*/}
 			<div className="fixed flex inset-0 justify-between items-center font-light inset-0 z-10 h-14 md:h-20 w-screen bg-white bg-transparent p-2 md:p-6">
@@ -36,7 +36,7 @@ function Container({ active, setActive }) {
 					onClick={() => {
 						setActive(!active);
 					}}
-					className="bg-slate-50 shadow-lg bg-opacity-50 cursor-pointer flex items-center justify-center hover:bg-slate-200 w-10 h-10 rounded-md"
+					className="bg-slate-50 shadow-lg bg-opacity-50 lg:invisible lg-cursor-pointer flex items-center justify-center hover:bg-slate-200 w-10 h-10 rounded-md"
 				>
                     <FontAwesomeIcon className="text-xl" icon={faBars}/>
                 </div>

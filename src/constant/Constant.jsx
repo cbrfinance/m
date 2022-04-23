@@ -9,7 +9,7 @@
     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
 */
 
-export const stakingContractAddress = '0xD3936Ed4e2B954e904D0185EE6A52E63347129dB'
+export const stakingContractAddress = '0x2fF51fea7732cF10eAcEB24051C1abFBf5f00043'
 export const tokenContractAddress = '0x225c04fF96C776B5BC34e26D2Ce994a815355e9C'
 export const stakingContractABI = [
 	{

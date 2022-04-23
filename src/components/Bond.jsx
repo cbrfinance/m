@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import BondList from './BondList';
+import BondModal from './BondModal'
 import pairs from './pairs';
 function Bond() {
 	const [first, setFirst] = useState(false);
+    const [active, setActive] = useState(false);
+    const [modalPair, setModalPair] = useState({});
+
 
 	useEffect(() => {
 		setFirst(true);
 	}, []);
 
 	return (
+        
 		<div className="p-1">
-      
+            {active && <div><BondModal 
+            active={active} 
+            setActive={setActive}
+            token1={modalPair.token1}
+						token2={modalPair.token2}
+						token1img={modalPair.token1img}
+						token2img={modalPair.token2img}/></div>}
 			<div className="flex flex-col space-y-4 md:flex-row md:space-y-0 m-auto md:space-x-4 max-w-3xl">
 				<div
 					className={`flex p-4 w-full bg-gray-100 flex-col items-center md:flex-1 rounded-lg ${
@@ -50,6 +61,9 @@ function Bond() {
 						token2={pair.token2}
 						token1img={pair.token1img}
 						token2img={pair.token2img}
+                        setModalPair={setModalPair}
+                        setActive={setActive}
+                        active={active}
 					/>
 				))}
 

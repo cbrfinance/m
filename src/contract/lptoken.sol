@@ -19,11 +19,9 @@ contract Calculator{
 
     uint lptokenPrice = (2*sqrtK*HomoraMath.sqrt(priceofEth)/2**56*HomoraMath.sqrt(priceofUSD)/2**56);
 
-    function getLPTOKEN() view public returns(uint, uint, uint, uint) {
+    function getLPTOKEN() view public returns(uint, uint) {
         
-        return (sqrtK, priceofEth, lptokenPrice*totalSupply/2**112, lptokenPrice*lpamout*reseveredETH/reseveredUSD/2**112);  //that give us USD in 10^^18
+        return (lptokenPrice*totalSupply/2**112, lptokenPrice*lpamout*reseveredETH/reseveredUSD/2**112);  //that give us USD in 10^^18
     }
-
-
     
 }

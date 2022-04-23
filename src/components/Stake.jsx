@@ -70,8 +70,8 @@ function Stake({setToastType}) {
                         
 						</div>
 					</div>
-					<div onClick={()=>{connectWallet()}} className="cursor-pointer flex flex-col items-center">
-                        {!currentAccount && (<><div className="bg-slate-400 hover:bg-slate-500 transition-all duration-200 hover:text-black py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
+					<div className="flex flex-col items-center">
+                        {!currentAccount && (<><div onClick={()=>{connectWallet()}} className="cursor-pointer bg-slate-400 hover:bg-slate-500 transition-all duration-200 hover:text-black py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
 							Connect Wallet
 						</div>
 						<p className="font-light text-sm">
@@ -90,16 +90,16 @@ function Stake({setToastType}) {
 					<p onClick={()=>{setStakeMenu(true); setStakeAmount('');}} className={`border-b-4  cursor-pointer hover:text-gray-400 ${stakeMenu ? 'border-slate-600 font-bold' : 'border-gray-100'}`}>Stake</p>
 					<p onClick={()=>{setStakeMenu(false); setStakeAmount('');}} className={`border-b-4 cursor-pointer hover:text-gray-400 ${!stakeMenu ? 'border-slate-600 font-bold' : 'border-gray-100'}`}>Unstake</p>
 				</div>
-                <div className="w-full h-10 px-3 py-1 flex bg-gray-300 items-center rounded-lg mt-4 max-w-md m-auto">
+                <div className="w-full h-10 px-3 py-1 flex bg-gray-300 items-center rounded-lg mt-4 max-w-md m-auto hover:border border-solid border-0 border-indigo-300">
                     <input
                         placeholder={`Amount(${!stakeMenu ? 's' : ''}CBR)`}
                         type="number"
                         step="0.0001"
                         value={stakeAmount}
                         onChange={(e) => onStakeChange(e)}
-                        className="outline-none placeholder-gray-100 bg-gray-300 h-full w-1 flex-grow"
+                        className="outline-none placeholder-slate-700 bg-gray-300 h-full w-1 flex-grow"
                     />
-					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.rCBRBalance) : setStakeAmount(indInfo.rsCBRBalance)}} className="text-white cursor-pointer">Max</p>
+					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.rCBRBalance) : setStakeAmount(indInfo.rsCBRBalance)}} className="text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
 				</div>
                 {loading?(<Loading className="m-4"/>) : (<div onClick={()=>{stakeMenu? _stake() : _unstake()}} className="text-center transition-all duration-200 hover:bg-slate-500 hover:text-black cursor-pointer bg-slate-400 py-3 px-12 text-white text-lg font-normal mt-4 rounded-lg">
 							{stakeMenu? 'Stake' : 'Unstake'}
