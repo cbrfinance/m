@@ -38,8 +38,8 @@ contract Stake{
     /************BACK END DATA*************/
     uint256 internal INDEX; // Index Gons - tracks rebase growth
 
-    uint256 roundStartTime = 1650553200;
-    uint256 roundDuration = 28800;
+    uint256 roundStartTime = 1650639600;
+    uint256 roundDuration = 7200;
     uint256 lastUpdateRound = 1;
     uint256 currentRate = 10030;
     uint256 private _gonsPerFragment;
@@ -56,7 +56,7 @@ contract Stake{
         CBR = TOKEN(_tokenAddress);
         _fragment = INITIAL_FRAGMENTS;
         _gonsPerFragment = TOTAL_GONS/_fragment;
-        INDEX = amountToGons(10**9);
+        INDEX = (10**9) * _gonsPerFragment;
     }
     //TOTAL_GONS 는 분자 _totalSupply는 분모로 생각하자
     /********STAKE UNSTAKE REBASE***********/
@@ -151,6 +151,12 @@ contract Stake{
     /********************** External view ***************/
      function decimals() public view virtual returns (uint8) {
         return 9;
+    }
+    function showlastupdateround() external view returns(uint256){
+        return lastUpdateRound;
+    }
+    function showRFrac() external view returns(uint256){
+        return rFragment();
     }
     function getFrontGenInfo() external view returns(FrontGenInfo memory) {
 

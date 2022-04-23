@@ -12,7 +12,6 @@ function Stake({setToastType}) {
   const [loading, setLoading] = useState(false);
   const [stakeMenu, setStakeMenu] = useState(true);
   const [loadingData, setLoadingData] = useState(true);
-
   const {getStakeInfo, stake, unstake, currentAccount, newNet, connectWallet} = React.useContext(Context)
   
     const onStakeChange = (e) => {
@@ -30,15 +29,23 @@ function Stake({setToastType}) {
         setStakeAmount('');
         getStakeInfo(setGenInfo, setIndInfo)
     }
-
+  
    useEffect(() => {
+    
+    
     const _getStakeInfo = async () =>
     {
         await getStakeInfo(setGenInfo, setIndInfo)
         setLoadingData(false);
     }
     _getStakeInfo()
+    const countdown = setInterval(()=>{
+        _getStakeInfo()
+        console.log("hi")
+    }, 20000);
     setFirst(true)
+    return () => clearInterval(countdown);
+
   }, [getStakeInfo, newNet]);
 
 
