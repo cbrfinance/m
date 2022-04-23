@@ -12,6 +12,7 @@ function Stake({setToastType}) {
   const [loading, setLoading] = useState(false);
   const [stakeMenu, setStakeMenu] = useState(true);
   const [loadingData, setLoadingData] = useState(true);
+
   const {getStakeInfo, stake, unstake, currentAccount, newNet, connectWallet} = React.useContext(Context)
   
     const onStakeChange = (e) => {
@@ -97,7 +98,7 @@ function Stake({setToastType}) {
                         step="0.0001"
                         value={stakeAmount}
                         onChange={(e) => onStakeChange(e)}
-                        className="outline-none text-2xl text-gray-600 placeholder-slate-400 placeholder-font-light bg-gray-300 h-full w-1 flex-grow"
+                        className="outline-none text-xl text-gray-600 placeholder-slate-400 placeholder-font-light bg-gray-300 h-full w-1 flex-grow"
                     />
 					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.rCBRBalance) : setStakeAmount(indInfo.rsCBRBalance)}} className="text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
 				</div>
