@@ -61,7 +61,7 @@ function Stake({setToastType}) {
                         <h2 className="-mb-1 font-extrabold text-lg">Single Stake (3,3)</h2>
                         <h4 className="font-thin text-xs">
                             
-                            <span className="font-semibold">{genInfo.secondToHM}</span> to next rebase
+                            <span className="font-semibold">{genInfo.secondToHM}</span> to rebase
                         </h4>
                     </div>
 
