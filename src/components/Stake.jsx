@@ -62,7 +62,7 @@ function Stake({setToastType}) {
 
                     </div>
 
-                    <div className="relative bg-gray-300 rounded-xl w-48 p-1 h-7 shadow-lg">
+                    <div className="relative bg-gray-300 rounded-xl w-44 p-1 h-7 shadow-lg">
                         <h4 className="absolute text-center w-full inline inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 font-thin text-xs">  
                             <span className="font-semibold">{genInfo.secondToHM}</span> <span>to rebase</span>
                         </h4>
