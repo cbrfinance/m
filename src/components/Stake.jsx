@@ -54,16 +54,19 @@ function Stake({setToastType}) {
 		<div className="p-1 flex space-y-4 flex-col">
 			<div className={`w-full p-4 bg-gray-100 rounded-lg max-w-3xl m-auto ${first? 'scale-100' : 'scale-0'} transition-all duration-700`}>
                 <div className="w-full flex justify-between mb-4">
-                    <h2 className="mb-4 font-extrabold text-lg">Single Stake (3,3)</h2>
-
+                    
                     <div>
-                        <div className="bg-gray-300 rounded-xl w-48 p-1 h-7 shadow-lg mb-2">
-                            <div style={progressbar} className={` ${loadingData && 'w-0'} transition-all duration-1000 h-5 rounded-xl bg-gray-100`}></div>
-                        </div>
-                        <h4 className="ml font-thin text-xs">
-                            <span className="font-semibold">{genInfo.secondToHM}</span> to next rebase <span className="font-semibold">({genInfo.secondLeftPercent}%)</span>
+                        <h2 className="-mb-1 font-extrabold text-lg">Single Stake (3,3)</h2>
+                        <h4 className="font-thin text-xs">
+                            <span className="font-semibold">{genInfo.secondToHM}</span> to next rebase
                         </h4>
                     </div>
+
+                    <div className="relative bg-gray-300 rounded-xl w-48 p-1 h-7 shadow-lg mb-2">
+                        <p className="absolute text-stone-600 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-3 text-xs font-semibold">{genInfo.secondLeftPercent}%</p>
+                        <div style={progressbar} className={` ${loadingData && 'w-0'} transition-all duration-1000 h-5 rounded-xl bg-gray-100`}></div>
+                    </div>
+                        
                 </div>
 				<div className="flex flex-col items-center gap-y-3">
 					<div className="flex flex-col items-center gap-y-3 md:flex-row md:justify-around md:w-full">
