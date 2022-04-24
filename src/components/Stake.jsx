@@ -63,8 +63,8 @@ function Stake({setToastType}) {
                     </div>
 
                     <div className="relative bg-gray-300 rounded-xl w-48 p-1 h-7 shadow-lg">
-                        <h4 className="absolute inset-0 top-1/2 -translate-y-1/2 translate-x-4 font-thin text-xs">  
-                            <span className="font-semibold">{genInfo.secondToHM}</span> to rebase
+                        <h4 className="absolute text-center w-full inline inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 font-thin text-xs">  
+                            <span className="font-semibold">{genInfo.secondToHM}</span> <span>to rebase</span>
                         </h4>
                         
                         <div style={progressbar} className={` ${loadingData && 'w-0'} transition-all duration-1000 h-5 rounded-xl bg-gray-100`}></div>
