@@ -3,8 +3,19 @@
 pragma solidity >=0.5.0 <0.9.0;
 import "./TOKEN.sol";
 
-contract LPcalculator {
+contract Bond {
+    uint totalSaleInUSD_4;
+    struct Pair { // Struct
+        address pairAddress;
+        address tokenA;
+        address tokenB;
+        bool onSale;
+        uint256 pairTotalSaleInUSD_4;
+    }
     address treasuryAccount;
+    mapping(string =>address) pairToAddress;
+
+
     TOKEN CBR;   //TOKEN
     function getLPvalue(address pair) internal view returns(uint256){
         uint112 reserve0;
@@ -42,7 +53,6 @@ contract LPcalculator {
         uint256 tokenAmount_9 = inputLPvalueinUSD_112_18 / tokenPriceinUSD_4 / 10**5 / (2**112);
         require(minToken <= tokenAmount_9);
         CBR.mint(msg.sender, tokenAmount_9);
-
     }
 }
 
