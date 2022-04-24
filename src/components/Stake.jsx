@@ -53,7 +53,7 @@ function Stake({setToastType}) {
 	return (
 		<div className="p-1 flex space-y-4 flex-col">
 			<div className={`w-full p-4 bg-gray-100 rounded-lg max-w-3xl m-auto ${first? 'scale-100' : 'scale-0'} transition-all duration-700`}>
-                <div className="w-full flex justify-between mb-4">
+                <div className="w-full flex justify-between items-center mb-4">
                     
                     <div>
                         <h2 className="-mb-1 font-extrabold text-lg">Single Stake (3,3)</h2>
