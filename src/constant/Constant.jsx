@@ -11,7 +11,7 @@
 
 export const stakingContractAddress = '0xA9276ab370D803Bb8e6f35B9Ac3994621c7135Fb'
 export const tokenContractAddress = '0x225c04fF96C776B5BC34e26D2Ce994a815355e9C'
-export const bondContractAddress = '0xEC035f2f5acfE3Edd7b572CAf50590Bae38D9843'
+export const bondContractAddress = '0x297FdFE93EDA6b54E4Ee721320953e088De181A4'
 export const KSPAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"
 
 export const stakingContractABI = [
@@ -624,6 +624,55 @@ export const bondContractABI = [
 			}
 		],
 		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "pair",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lpAmount_n",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenPriceinUSD_4",
+				"type": "uint256"
+			}
+		],
+		"name": "getInputLPValueTokenAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{

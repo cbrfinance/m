@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: GPL-3.0
-// 이거 주소임 0xEC035f2f5acfE3Edd7b572CAf50590Bae38D9843
 
 pragma solidity >=0.7.0 <0.8.0;
 
@@ -142,6 +141,19 @@ contract Bond {
         uint256 lpValueinUSD_112_18_n = getLPvalueWithPair(pair); 
         uint256 userlpAmount_n = IKlayExchange(pair).balanceOf(msg.sender);
         return getInputLPvalue(lpValueinUSD_112_18_n, userlpAmount_n);
+    }
+
+    function getInputLPValueTokenAmount(address pair, uint256 lpAmount_n, uint256 tokenPriceinUSD_4) public view returns(uint256, uint256, uint256, uint256, uint256){
+        uint256 lpValueinUSD_112_18_n = getLPvalueWithPair(pair);
+        uint256 lpAmountValueinUSD_18;
+        uint256 lpAmountValueinUSD_0;
+        uint256 lpAmountValueinUSD_112_18;
+        (lpAmountValueinUSD_18, lpAmountValueinUSD_0, lpAmountValueinUSD_112_18) = getInputLPvalue(lpValueinUSD_112_18_n, lpAmount_n);
+        uint256 lpAmountValueinUSD_112 = lpAmountValueinUSD_112_18 / (10**18);
+        uint256 tokenAmount_9;
+        uint256 tokenAmount_0;
+        (tokenAmount_9, tokenAmount_0) = convertUSDtoCBR(lpAmountValueinUSD_112, tokenPriceinUSD_4);
+        return (lpAmountValueinUSD_18, lpAmountValueinUSD_0, lpAmountValueinUSD_112_18, tokenAmount_9, tokenAmount_0);
     }
 
     function getInputLPvalue(uint256 lpValueinUSD_112_18_n, uint256 lpAmount_n) public pure returns(uint256, uint256, uint256){

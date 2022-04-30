@@ -7,10 +7,19 @@ function BondModal(pair) {
 	const [first, setFirst] = useState(false);
     const [setting, setSetting] = useState(false);
     const [slippage, setSlippage] = useState();
-    const {connectWallet, currentAccount} = React.useContext(Context);
+    const [lpAmount, setlpAmount] = useState();
+    const [CBRAmount, setCBRAmount] = useState();
+    const {connectWallet, currentAccount, getLPValueCBRAmount} = React.useContext(Context);
 
     const onSlippageChange = (e) => {
         setSlippage(e.target.value);
+    }
+    const onLPAmountChange = (e) => {
+        setlpAmount(e.target.value);
+        getLPValueCBRAmount(pair.address, e.target.value, pair.KSPPrice, setCBRAmount);
+    }
+    const onCBRAmountChange = (e) => {
+        setCBRAmount(e.target.value);
     }
 
 	useEffect(() => {
@@ -121,8 +130,8 @@ function BondModal(pair) {
                                     placeholder=""
                                     type="number"
                                     step="0.1"
-                                    value={slippage}
-                                    onChange={(e) => onSlippageChange(e)}
+                                    value={lpAmount}
+                                    onChange={(e) => onLPAmountChange(e)}
                                     className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-full w-1 flex-grow"
                                 />
                                 <p className="pl-2 text-sm text-gray-600 bg-gray-200">LP</p>
@@ -135,8 +144,8 @@ function BondModal(pair) {
                                     placeholder=""
                                     type="number"
                                     step="0.1"
-                                    value={slippage}
-                                    onChange={(e) => onSlippageChange(e)}
+                                    value={CBRAmount}
+                                    onChange={(e) => onCBRAmountChange(e)}
                                     className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-full w-1 flex-grow"
                                 />
                                 <p className="pl-2 text-sm text-gray-600 bg-gray-200">SCBR</p>

@@ -25,8 +25,8 @@ function BondList(pair) {
 				<h1 className="text-sm flex-1">$50.15</h1>
 				<h1 className="text-sm flex-1">7%</h1>
 				<h1 className="text-sm flex-1">2days</h1>
-				<div onClick={()=>{pair.setModalPair({token1:pair.token1, token2:pair.token2, token1img:pair.token1img, token2img:pair.token2img}); pair.setActive(!pair.active)}} className="cursor-pointer hover:bg-slate-500 cursor flex-1 bg-slate-400 py-1 px-1 text-white text-md font-normal rounded-lg">
-					Bond
+				<div onClick={()=>{pair.setModalPair({address: pair.address, token1:pair.token1, token2:pair.token2, token1img:pair.token1img, token2img:pair.token2img}); pair.setActive(!pair.active)}} className="cursor-pointer hover:bg-slate-500 cursor flex-1 bg-slate-400 py-1 px-1 text-white text-md font-normal rounded-lg">
+					Bond {pair.address}
 				</div>
 			</div>
 
@@ -61,7 +61,7 @@ function BondList(pair) {
 					<p className="text-gray-400">Duration</p>
 					<p>2days</p>
 				</div>
-				<div onClick={()=>{pair.setModalPair({token1:pair.token1, token2:pair.token2, token1img:pair.token1img, token2img:pair.token2img}); pair.setActive(!pair.active)}} className="cursor-pointer hover:bg-slate-500 text-center bg-slate-400 py-2 px-1 text-white text-lg font-normal rounded-lg">
+				<div onClick={()=>{pair.setModalPair({address:pair.address, token1:pair.token1, token2:pair.token2, token1img:pair.token1img, token2img:pair.token2img}); pair.setActive(!pair.active)}} className="cursor-pointer hover:bg-slate-500 text-center bg-slate-400 py-2 px-1 text-white text-lg font-normal rounded-lg">
 					Bond
 				</div>
 			</div>

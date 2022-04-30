@@ -24,14 +24,37 @@ export const Provider = ({ children }) => {
         const string = (+token).toFixed(tofix)
         return string;
      }
-    
+
+    const getLPValueCBRAmount = async (address, lpAmount, CBRUSD, setCBRAmount) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
+              
+                const parsedLPAmount = ethers.utils.parseUnits(lpAmount.toString(), 18);
+                const parsedCBRUSD = ethers.utils.parseUnits(CBRUSD.toString(), 4);
+                const a = await bondContract.getInputLPValueTokenAmount(address, parsedLPAmount, parsedCBRUSD);
+                console.log(a);
+                const b = convertfinal(a[0], 18, 2)
+                setCBRAmount(b)
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
+
     const getKSPValue = async (setKSPPrice) => {
         try {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
                 const a = await bondContract.getRatioWithToken(KSPAddress);
-                const b = convertfinal(a[0], 18, 2)
+                const b = convertfinal(a[0], 18, 4)
                 setKSPPrice(b)
             }
             else {
@@ -43,6 +66,7 @@ export const Provider = ({ children }) => {
             console.log(error);
           }
     }
+
     const setCBR = async () => {
         await window.ethereum.request({
             method: 'wallet_watchAsset',
@@ -237,6 +261,7 @@ export const Provider = ({ children }) => {
            unstake,
            newNet,
            getKSPValue,
+           getLPValueCBRAmount,
           }}
         >
           {children}
