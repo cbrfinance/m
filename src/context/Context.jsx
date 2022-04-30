@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import {stakingContractABI, stakingContractAddress, tokenContractAddress } from "../constant/Constant";
+import {stakingContractABI, stakingContractAddress, tokenContractAddress, bondContractABI, bondContractAddress, KSPAddress } from "../constant/Constant";
 
 export const Context = React.createContext();
 
@@ -19,9 +19,30 @@ export const Provider = ({ children }) => {
     const [currentAccount, setCurrentAccount] = useState("")
     const [newNet, setnewNet] = useState(false);
     
+    const convertfinal = (target, decimal, tofix) => {
+        const token = ethers.utils.formatUnits(target, decimal)
+        const string = (+token).toFixed(tofix)
+        return string;
+     }
     
-    
-   
+    const getKSPValue = async (setKSPPrice) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
+                const a = await bondContract.getRatioWithToken(KSPAddress);
+                const b = convertfinal(a[0], 18, 2)
+                setKSPPrice(b)
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
     const setCBR = async () => {
         await window.ethereum.request({
             method: 'wallet_watchAsset',
@@ -157,11 +178,7 @@ export const Provider = ({ children }) => {
         }
       };
 
-     const convert = (target) => {
-        const token = ethers.utils.formatUnits(target, 9)
-        const string = (+token).toFixed(4)
-        return string;
-     }
+
 
      function secondsToHms(d) {
         d = Number(d);
@@ -174,7 +191,11 @@ export const Provider = ({ children }) => {
 
         return hDisplay + mDisplay; 
     }
-
+    const convert = (target) => {
+        const token = ethers.utils.formatUnits(target, 9)
+        const string = (+token).toFixed(4)
+        return string;
+    }
       const getStakeInfo = async (setGenInfo, setIndInfo) => {
         try {
           if (ethereum) {
@@ -215,6 +236,7 @@ export const Provider = ({ children }) => {
            stake,
            unstake,
            newNet,
+           getKSPValue,
           }}
         >
           {children}

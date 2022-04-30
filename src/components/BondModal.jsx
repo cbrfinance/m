@@ -99,12 +99,12 @@ function BondModal(pair) {
                         <div className="w-full flex justify-around">
                             <div>
                                 <p className="text-lg text-gray-500">Bond Price</p>
-                                <p className="text-center text-2xl font-bold">$36.80</p>
+                                <p className="text-center text-2xl font-bold">$3.24</p>
                             </div>
                             <div>
                                 <div>
                                     <p className="text-lg text-gray-500">Market Price</p>
-                                    <p className="text-center text-2xl font-bold">$35.81</p>
+                                    <p className="text-center text-2xl font-bold">${pair.KSPPrice}</p>
                                 </div>
                             </div>
                         </div>
@@ -146,20 +146,26 @@ function BondModal(pair) {
                             <div className="flex justify-between">
                                 <p>Your Balance</p>
                                 <p>
-                                    3.245 {pair.token1}-{pair.token2} LP
+                                    3.245 <span className="text-gray-500">{pair.token1}-{pair.token2} LP</span>
                                 </p>
                             </div>
                             <div className="flex justify-between">
+                                <p>Your Balance in USD</p>
+                                <p>1512 <span className="text-gray-500">USD</span></p>
+                            </div>
+                            <div className="flex justify-between">
                                 <p>You Will Get</p>
-                                <p>0.0000 sOHM</p>
+                                <p>
+                                    0.0000 <span className="text-gray-500">sOHM</span>
+                                </p>
                             </div>
                             <div className="flex justify-between">
                                 <p>Discount</p>
-                                <p>2.4%</p>
+                                <p>2.4 <span className="text-gray-500">%</span></p>
                             </div>
                             <div className="flex justify-between">
                                 <p>Duration</p>
-                                <p>2 days</p>
+                                <p>2 <span className="font-light text-gray-500">days</span></p>
                             </div>
                         </div>
                     </div>

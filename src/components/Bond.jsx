@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import BondList from './BondList';
+import {Context} from '../context/Context'
+import BondList from './BondList'
 import BondModal from './BondModal'
+import Skel from './Skel'
 import pairs from './pairs';
 function Bond() {
 	const [first, setFirst] = useState(false);
     const [active, setActive] = useState(false);
     const [modalPair, setModalPair] = useState({});
-
-
+    const [KSPPrice, setKSPPrice] = useState();
+    const {getKSPValue} = React.useContext(Context)
+    
 	useEffect(() => {
 		setFirst(true);
-	}, []);
+        getKSPValue(setKSPPrice);
+	}, [getKSPValue]);
 
 	return (
         
 		<div className="p-1">
-            {active && <div><BondModal 
+            {active && <div><BondModal
+            KSPPrice={KSPPrice} 
             active={active} 
             setActive={setActive}
             token1={modalPair.token1}
@@ -37,8 +42,10 @@ function Bond() {
 						first ? 'scale-100' : 'scale-0'
 					} transition-all duration-700`}
 				>
-					<p className="font-normal text-xl text-gray-500">CBR Price</p>
-					<p className="font-bold text-lg">$57.36</p>
+					<p className="font-normal text-xl text-gray-500">KSP Price</p>
+                    {KSPPrice && (<p className="font-bold text-lg">${KSPPrice} </p>)}
+                    {!KSPPrice && (<Skel/>)}
+					
 				</div>
 			</div>
 
