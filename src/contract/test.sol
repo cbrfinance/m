@@ -1,73 +1,156 @@
-0x296205377F8cCdD604CB92A7A0C1FFb01eBcbA83
-
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.8.0;
 
 import "./HomoraMath.sol";
 
+//store:0x1289550d988177575154c2CA45c95CCfb32F837d
 
+//factory:0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654
 
 contract Bond {
 
     using HomoraMath for uint256;
     address USDT = 0xceE8FAF64bB97a73bb51E115Aa89C17FfA8dD167;
     IKlayswapStore store;
+    IKlayswapFactory factory;
 
-    constructor(address _store) {
-        store = IKlayswapStore(_store);        
+    constructor(address _store, address _factory) {
+        store = IKlayswapStore(_store); 
+        factory = IKlayswapFactory(_factory);   
+    }
+    function getRatioWithToken(address token) public view returns(uint256, uint256, uint256, uint256, uint256){
+        address stablePair = getUSDTPairAddress(token);
+        return getRatioWithStable(stablePair);
     }
 
-    function getRatioWithStable(address stablePair) public view returns(uint256, uint256, uint256){
+    function getUSDTPairAddress(address token) public view returns(address){
+        address stablePair = factory.tokenToPool(token, USDT);
+        return stablePair;
+    }
+
+    function getLPvalueWithPair(address pair) public view returns(uint256){
+
+        address token0 = IKlayExchange(pair).tokenA();
+        address token1 = IKlayExchange(pair).tokenB();
+        uint256 token0inUSD_112;
+        uint256 token1inUSD_112;
+        uint256 lpValueinUSD_112_18_n;
+        if((token0 != USDT) && (token1 != USDT))
+        {
+            ( , , token0inUSD_112, , ) = getRatioWithToken(token0);
+            ( , , token1inUSD_112, , ) = getRatioWithToken(token1);
+
+            lpValueinUSD_112_18_n = getNonStableLPvalue(pair, token0inUSD_112, token1inUSD_112);
+
+            return lpValueinUSD_112_18_n;
+        }
+        else{
+            if(token0 == USDT){
+                ( , , token1inUSD_112, , ) = getRatioWithToken(token1);
+                lpValueinUSD_112_18_n = getNonStableLPvalue(pair, 2**112, token1inUSD_112);
+                return lpValueinUSD_112_18_n;
+            }else if(token1 == USDT){
+                ( , , token0inUSD_112, , ) = getRatioWithToken(token0);
+                lpValueinUSD_112_18_n = getNonStableLPvalue(pair, 2**112, token0inUSD_112);    
+                return lpValueinUSD_112_18_n;      
+            }
+            else{
+                return 0;
+            }
+        }
+    }
+    
+    function getRatioWithStable(address stablePair) public view returns(uint256, uint256, uint256, uint256, uint256){
         uint112 reserve0;
         uint112 reserve1;
-        
+        uint256 reserve0_18;
+        uint256 reserve1_18;
+
+
         address token0 = IKlayExchange(stablePair).tokenA();
         address token1 = IKlayExchange(stablePair).tokenB();
         (reserve0, reserve1, ) = store.getReserves(stablePair);
-        require(reserve0 != 0 && reserve1 != 0, "Oracle: NO_RESERVES");
-        uint256 reserve0_18 = reserve0*(10**(18-IKIP7(token0).decimals()));
-        uint256 reserve1_18 = reserve1*(10**(18-IKIP7(token1).decimals()));
+
+        if(token0 == address(0)){
+            reserve0_18 = stablePair.balance;
+            reserve1_18 = reserve1*(10**(18-IKIP7(token1).decimals()));
+        }
+        else if(token1 == address(0)){
+            reserve1_18 = stablePair.balance;
+            reserve0_18 = reserve0*(10**(18-IKIP7(token0).decimals()));
+        }else{
+            reserve0_18 = reserve0*(10**(18-IKIP7(token0).decimals()));
+            reserve1_18 = reserve1*(10**(18-IKIP7(token1).decimals()));
+        }
+
         uint256 reserve0_112_18 = reserve0_18 * (2**112);
         uint256 reserve1_112_18 = reserve1_18 * (2**112);
+        require(reserve0_18 != 0 && reserve1_18 != 0, "Oracle: NO_RESERVES");
+
         if(token0 == USDT){
             uint256 token1inUSD_112 = reserve0_112_18 / reserve1_18;
             uint256 token1inUSD_18 = token1inUSD_112 / 5192296858534827;
             uint256 token1inUSD_0 = token1inUSD_18 / (10**18);
-            return(token1inUSD_18, token1inUSD_0 ,token1inUSD_112);
+            return(token1inUSD_18, token1inUSD_0 ,token1inUSD_112, reserve0_18, reserve1_18);
         }
         else{
             uint256 token0inUSD_112 = reserve1_112_18 / reserve0_18;
             uint256 token0inUSD_18 = token0inUSD_112 / 5192296858534827;
             uint256 token0inUSD_0 = token0inUSD_18 / (10**18);
-            return(token0inUSD_18, token0inUSD_0, token0inUSD_112);
+            return(token0inUSD_18, token0inUSD_0, token0inUSD_112, reserve0_18, reserve1_18);
         }
     }
 
-    function getLPvalue(address pair, uint256 token0inUSD_112, uint256 token1inUSD_112) public view returns(uint256){
+    function getNonStableLPvalue(address pair, uint256 token0inUSD_112, uint256 token1inUSD_112) public view returns(uint256){
         uint112 reserve0;
         uint112 reserve1;
+        uint256 reserve0_18;
+        uint256 reserve1_18;
         address token0 = IKlayExchange(pair).tokenA();
         address token1 = IKlayExchange(pair).tokenB();
         (reserve0, reserve1, ) = store.getReserves(pair);
-        require(reserve0 != 0 && reserve1 != 0, "Oracle: NO_RESERVES");
-        uint256 reserve0_18 = reserve0*(10**(18-IKIP7(token0).decimals()));
-        uint256 reserve1_18 = reserve1*(10**(18-IKIP7(token1).decimals()));
+
+        if(token0 == address(0)){
+            reserve0_18 = pair.balance;
+            reserve1_18 = reserve1*(10**(18-IKIP7(token1).decimals()));
+        }
+        else if(token1 == address(0)){
+            reserve1_18 = pair.balance;
+            reserve0_18 = reserve0*(10**(18-IKIP7(token0).decimals()));
+        }else{
+            reserve0_18 = reserve0*(10**(18-IKIP7(token0).decimals()));
+            reserve1_18 = reserve1*(10**(18-IKIP7(token1).decimals()));
+        }
+
+        require(reserve0_18 != 0 && reserve1_18 != 0, "Oracle: NO_RESERVES");
+
         uint256 totalSupply_n = IKlayExchange(pair).totalSupply();
         uint256 sqrtK_112_18_n = HomoraMath.sqrt(reserve0_18*reserve1_18).fdiv(totalSupply_n);
         uint256 lpValueinUSD_112_18_n = (2*sqrtK_112_18_n*HomoraMath.sqrt(token0inUSD_112)/2**56*HomoraMath.sqrt(token1inUSD_112)/2**56);
         return lpValueinUSD_112_18_n;
+    } 
+
+    function getTotalTVL(address pair) public view returns(uint256, uint256, uint256){
+        uint256 lpValueinUSD_112_18_n = getLPvalueWithPair(pair);
+        uint256 lpAmount_n = IKlayExchange(pair).totalSupply();
+        return getInputLPvalue(lpValueinUSD_112_18_n, lpAmount_n);
     }
 
-    function getInputLPvalue(address pair, uint256 token0inUSD_112, uint256 token1inUSD_112, uint256 lpAmount_n) external view returns(uint256, uint256, uint256){
-        uint256 lpValueinUSD_112_18_n = getLPvalue(pair, token0inUSD_112, token1inUSD_112);
+    function getUserStableLPvalue(address pair) public view returns(uint256, uint256, uint256){
+        uint256 lpValueinUSD_112_18_n = getLPvalueWithPair(pair); 
+        uint256 userlpAmount_n = IKlayExchange(pair).balanceOf(msg.sender);
+        return getInputLPvalue(lpValueinUSD_112_18_n, userlpAmount_n);
+    }
+
+    function getInputLPvalue(uint256 lpValueinUSD_112_18_n, uint256 lpAmount_n) public pure returns(uint256, uint256, uint256){
         uint256 lpAmountValueinUSD_112_18 = lpValueinUSD_112_18_n * lpAmount_n;
         uint256 lpAmountValueinUSD_18 = lpAmountValueinUSD_112_18 / (2**112);
         uint256 lpAmountValueinUSD_0 = lpAmountValueinUSD_18 / (10**18);
-        return(lpAmountValueinUSD_112_18, lpAmountValueinUSD_18, lpAmountValueinUSD_0);
+        return(lpAmountValueinUSD_18, lpAmountValueinUSD_0, lpAmountValueinUSD_112_18);
     }
 
-    function convertUSDtoCBR(uint256 USD_112, uint256 tokenPriceinUSD_4) external view returns(uint256, uint256) {//입력된lp 의가치, 받을수잇는 토큰수량
+    function convertUSDtoCBR(uint256 USD_112, uint256 tokenPriceinUSD_4) public pure returns(uint256, uint256){
         uint256 tokenAmount_9 = USD_112 / tokenPriceinUSD_4 * (10**13) / (2**112);
         uint256 tokenAmount_0 = tokenAmount_9 / (10**9);
         return (tokenAmount_9, tokenAmount_0);
@@ -88,6 +171,7 @@ interface IKlayExchange {
 }
 
 interface IKlayswapFactory {
+    function tokenToPool(address tokenA, address tokenB) external view returns (address);
     function exchangeKlayPos(address token, uint amount, address[] calldata path) payable external;
     function exchangeKlayNeg(address token, uint amount, address[] calldata path) payable external;
     function exchangeKctPos(address tokenA, uint amountA, address tokenB, uint amountB, address[] calldata path) external;
