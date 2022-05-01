@@ -11,7 +11,7 @@
 
 export const stakingContractAddress = '0xA9276ab370D803Bb8e6f35B9Ac3994621c7135Fb'
 export const tokenContractAddress = '0x225c04fF96C776B5BC34e26D2Ce994a815355e9C'
-export const bondContractAddress = '0x297FdFE93EDA6b54E4Ee721320953e088De181A4'
+export const bondContractAddress = '0x0eB5a83c3590b29c8F4DBAdDAf0E2C3886eE4861'
 export const KSPAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"
 
 export const stakingContractABI = [
@@ -859,11 +859,6 @@ export const bondContractABI = [
 		],
 		"name": "getUserStableLPvalue",
 		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
 			{
 				"internalType": "uint256",
 				"name": "",

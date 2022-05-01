@@ -8,7 +8,7 @@ import "./HomoraMath.sol";
 
 //factory:0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654
 
-// 0x297FdFE93EDA6b54E4Ee721320953e088De181A4
+// 0x0eB5a83c3590b29c8F4DBAdDAf0E2C3886eE4861
 contract Bond {
 
     using HomoraMath for uint256;
@@ -138,12 +138,13 @@ contract Bond {
         return getInputLPvalue(lpValueinUSD_112_18_n, lpAmount_n);
     }
 
-    function getUserStableLPvalue(address pair) public view returns(uint256, uint256, uint256){
+    function getUserStableLPvalue(address pair) public view returns(uint256, uint256){
         uint256 lpValueinUSD_112_18_n = getLPvalueWithPair(pair); 
         uint256 userlpAmount_n = IKlayExchange(pair).balanceOf(msg.sender);
-        return getInputLPvalue(lpValueinUSD_112_18_n, userlpAmount_n);
+        uint256 lpAmountValueinUSD_18;
+        (lpAmountValueinUSD_18, , ) = getInputLPvalue(lpValueinUSD_112_18_n, userlpAmount_n);
+        return (userlpAmount_n, lpAmountValueinUSD_18);
     }
-
     function getInputLPValueTokenAmount(address pair, uint256 lpAmount_n, uint256 tokenPriceinUSD_4) public view returns(uint256, uint256, uint256, uint256, uint256){
         uint256 lpValueinUSD_112_18_n = getLPvalueWithPair(pair);
         uint256 lpAmountValueinUSD_18;

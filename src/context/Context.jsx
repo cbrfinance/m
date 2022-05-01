@@ -25,6 +25,28 @@ export const Provider = ({ children }) => {
         return string;
      }
 
+    const getUserStableLPvalue = async (decimals, address, setBalanceInfo) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, signer);
+                const a = await bondContract.getUserStableLPvalue(address);
+                const balanceInfo = {lpBalance : convertfinal(a[0], decimals, 6), lpBalanceFull : convertfinal(a[0], decimals, decimals), userlpinUSD : convertfinal(a[1], 18, 2)}
+                console.log(balanceInfo);
+                setBalanceInfo(balanceInfo);
+
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
+    
     const getLPValueCBRAmount = async (decimals, address, lpAmount, CBRUSD, setCBRAmount, setLPinUSD) => {
         try {
             if (ethereum) {
@@ -265,6 +287,7 @@ export const Provider = ({ children }) => {
            newNet,
            getKSPValue,
            getLPValueCBRAmount,
+           getUserStableLPvalue,
           }}
         >
           {children}

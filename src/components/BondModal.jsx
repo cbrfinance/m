@@ -9,8 +9,9 @@ function BondModal(pair) {
     const [slippage, setSlippage] = useState();
     const [lpAmount, setlpAmount] = useState();
     const [CBRAmount, setCBRAmount] = useState();
+    const [balanceInfo, setBalanceInfo] = useState({});
     const [lpinUSD, setLPinUSD] = useState();
-    const {connectWallet, currentAccount, getLPValueCBRAmount} = React.useContext(Context);
+    const {connectWallet, currentAccount, getLPValueCBRAmount, getUserStableLPvalue} = React.useContext(Context);
 
     const onSlippageChange = (e) => {
         setSlippage(e.target.value);
@@ -26,7 +27,8 @@ function BondModal(pair) {
 
 	useEffect(() => {
 		setFirst(true);
-	}, []);
+        getUserStableLPvalue(pair.decimals, pair.address, setBalanceInfo)
+	}, [getUserStableLPvalue, pair.decimals, pair.address]);
 	return (
 		<div
 			onClick={e => {
@@ -157,20 +159,21 @@ function BondModal(pair) {
                             <div className="flex justify-center text-lg">
                                 <p>{lpAmount} <span className="text-gray-500">LP</span> = {lpinUSD} <span className="text-gray-500">USD</span></p>
                             </div>
+                            
                             <div className="flex justify-between">
                                 <p>Your Balance</p>
                                 <p>
-                                    3.245 <span className="text-gray-500">{pair.token1}-{pair.token2} LP</span>
+                                    {balanceInfo.lpBalance} <span className="text-gray-500">{pair.token1}-{pair.token2} LP</span>
                                 </p>
                             </div>
                             <div className="flex justify-between">
                                 <p>Your Balance in USD</p>
-                                <p>1512 <span className="text-gray-500">USD</span></p>
+                                <p>{balanceInfo.userlpinUSD} <span className="text-gray-500">USD</span></p>
                             </div>
                             <div className="flex justify-between">
                                 <p>You Will Get</p>
                                 <p>
-                                    0.0000 <span className="text-gray-500">sOHM</span>
+                                    {CBRAmount} <span className="text-gray-500">sCBR</span>
                                 </p>
                             </div>
                             <div className="flex justify-between">
