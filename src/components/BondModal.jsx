@@ -129,7 +129,7 @@ function BondModal(pair) {
                            
 						</p></>)}
                         <div className="relative flex flex-col items-center w-full">
-                            <div className="mt-4 mb-1 w-full rounded-lg h-14 max-w-sm hover:rounded-md flex items-center text-2xl bg-gray-200 px-6 hover:border-gray-400 border-solid border border-gray-200">
+                            <div className="mt-4 mb-1 w-full rounded-lg h-14 max-w-sm hover:rounded-md flex items-center text-2xl bg-gray-200 pl-6 hover:border-gray-400 border-solid border border-gray-200">
                                 <input
                                     placeholder=""
                                     type="number"
@@ -138,7 +138,9 @@ function BondModal(pair) {
                                     onChange={(e) => onLPAmountChange(e)}
                                     className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-full w-1 flex-grow"
                                 />
+                                
                                 <p className="pl-2 text-sm text-gray-600 bg-gray-200">LP</p>
+                                <p onClick={()=>{setlpAmount(balanceInfo.lpBalanceFull)}} className="p-1 cursor-pointer font-semibold m-1 bg-slate-300 rounded-md text-xs text-gray-600 bg-gray-200">MAX</p>
                             </div>
                             <div className="absolute inset-0 top-1/2 -translate-y-1 left-1/2 -translate-x-1/2 flex text-xs items-center justify-center h-7 w-7 rounded-xl bg-gray-200 border-solid border-4 border-gray-100">
                                 <FontAwesomeIcon icon={faArrowDown}/>
