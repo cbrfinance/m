@@ -11,7 +11,7 @@ const createStakeContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(stakingContractAddress, stakingContractABI, signer);
-  
+
     return contract;
   };
   
@@ -25,18 +25,21 @@ export const Provider = ({ children }) => {
         return string;
      }
 
-    const getLPValueCBRAmount = async (address, lpAmount, CBRUSD, setCBRAmount) => {
+    const getLPValueCBRAmount = async (decimals, address, lpAmount, CBRUSD, setCBRAmount, setLPinUSD) => {
         try {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
-              
-                const parsedLPAmount = ethers.utils.parseUnits(lpAmount.toString(), 18);
+              console.log(decimals)
+                const parsedLPAmount = ethers.utils.parseUnits(lpAmount.toString(), decimals);
                 const parsedCBRUSD = ethers.utils.parseUnits(CBRUSD.toString(), 4);
                 const a = await bondContract.getInputLPValueTokenAmount(address, parsedLPAmount, parsedCBRUSD);
                 console.log(a);
-                const b = convertfinal(a[0], 18, 2)
-                setCBRAmount(b)
+                const lpinUSD = convertfinal(a[0], 18, 2)
+                const cbrAmount = convertfinal(a[3], 9, 4)
+                setLPinUSD(lpinUSD)
+                setCBRAmount(cbrAmount)
+                
             }
             else {
                 console.log("Ethereum is not present");

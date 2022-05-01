@@ -24,6 +24,7 @@ function Bond() {
             active={active} 
             setActive={setActive}
             address={modalPair.address}
+            decimals={modalPair.decimals}
             token1={modalPair.token1}
 			token2={modalPair.token2}
 			token1img={modalPair.token1img}
@@ -66,6 +67,7 @@ function Bond() {
 					<BondList
             key={pair.token1+pair.token2}
                         address={pair.address}
+                        decimals={pair.decimals}
 						token1={pair.token1}
 						token2={pair.token2}
 						token1img={pair.token1img}

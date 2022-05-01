@@ -8,6 +8,7 @@ import "./HomoraMath.sol";
 
 //factory:0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654
 
+// 0x297FdFE93EDA6b54E4Ee721320953e088De181A4
 contract Bond {
 
     using HomoraMath for uint256;

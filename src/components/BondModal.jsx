@@ -9,6 +9,7 @@ function BondModal(pair) {
     const [slippage, setSlippage] = useState();
     const [lpAmount, setlpAmount] = useState();
     const [CBRAmount, setCBRAmount] = useState();
+    const [lpinUSD, setLPinUSD] = useState();
     const {connectWallet, currentAccount, getLPValueCBRAmount} = React.useContext(Context);
 
     const onSlippageChange = (e) => {
@@ -16,7 +17,8 @@ function BondModal(pair) {
     }
     const onLPAmountChange = (e) => {
         setlpAmount(e.target.value);
-        getLPValueCBRAmount(pair.address, e.target.value, pair.KSPPrice, setCBRAmount);
+        if(e.target.value === ''){setLPinUSD(''); setCBRAmount('');}
+        getLPValueCBRAmount(pair.decimals, pair.address, e.target.value, pair.KSPPrice, setCBRAmount, setLPinUSD);
     }
     const onCBRAmountChange = (e) => {
         setCBRAmount(e.target.value);
@@ -152,6 +154,9 @@ function BondModal(pair) {
                             </div>
                         </div>
                         <div className="flex flex-col space-y-2 w-full p-4 text-sm">
+                            <div className="flex justify-center text-lg">
+                                <p>{lpAmount} <span className="text-gray-500">LP</span> = {lpinUSD} <span className="text-gray-500">USD</span></p>
+                            </div>
                             <div className="flex justify-between">
                                 <p>Your Balance</p>
                                 <p>
