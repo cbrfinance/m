@@ -140,7 +140,7 @@ function BondModal(pair) {
                                 />
                                 
                                 <p className="pl-2 text-sm text-gray-600 bg-gray-200">LP</p>
-                                <p onClick={()=>{setlpAmount(balanceInfo.lpBalanceFull)}} className="p-1 cursor-pointer font-semibold m-1 bg-slate-300 rounded-md text-xs text-gray-600 bg-gray-200">MAX</p>
+                                <p onClick={()=>{setlpAmount(balanceInfo.lpBalanceFull); getLPValueCBRAmount(pair.decimals, pair.address, balanceInfo.lpBalanceFull, pair.KSPPrice, setCBRAmount, setLPinUSD);}} className="p-1 cursor-pointer font-semibold m-1 bg-slate-300 rounded-md text-xs text-gray-600 bg-gray-200">MAX</p>
                             </div>
                             <div className="absolute inset-0 top-1/2 -translate-y-1 left-1/2 -translate-x-1/2 flex text-xs items-center justify-center h-7 w-7 rounded-xl bg-gray-200 border-solid border-4 border-gray-100">
                                 <FontAwesomeIcon icon={faArrowDown}/>
