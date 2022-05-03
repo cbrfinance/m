@@ -270,6 +270,7 @@ export const Provider = ({ children }) => {
 
     useEffect(() => {
         checkIfWalletIsConnect();
+        setNetwork();
       }, []);
 
       return (

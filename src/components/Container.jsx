@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Stake from './Stake';
+import AuctionSwap from './AuctionSwap'
 import Bond from './Bond';
 import Toast from './Toast';
 import { Routes, Route } from 'react-router-dom';
@@ -90,6 +91,7 @@ function Container({ active, setActive }) {
 				<Routes>
 					<Route path="/" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 					<Route path="/Stake" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
+                    <Route path="/AuctionSwap" element={<AuctionSwap />} />
 					<Route path="/Bond" element={<Bond />} />
 				</Routes>
 

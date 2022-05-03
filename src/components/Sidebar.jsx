@@ -1,7 +1,7 @@
 import React  from 'react';
 import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import{faLayerGroup, faBolt, faBook} from "@fortawesome/free-solid-svg-icons";
+import{faLayerGroup, faBolt, faBook, faRightLeft} from "@fortawesome/free-solid-svg-icons";
 import {faChartBar, faClone} from "@fortawesome/free-regular-svg-icons";
 import {faTwitter, faDiscord} from "@fortawesome/free-brands-svg-icons";
 function Sidebar({active, setActive}) {
@@ -22,6 +22,10 @@ function Sidebar({active, setActive}) {
           <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Dashbord'>
                 <FontAwesomeIcon icon={faChartBar}/>
                 <li>Dashboard</li>
+            </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/AuctionSwap'>
+                <FontAwesomeIcon icon={faRightLeft}/>
+                <li>Auction Swap</li>
             </NavLink>
             <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-2 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-2 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Bond'>
                 <FontAwesomeIcon icon={faClone}/>
