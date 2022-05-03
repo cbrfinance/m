@@ -10,5 +10,6 @@ module.exports = {
     plugins: [
         percentageWidth, // tell tailwindcss that you want to use it
         //other plugins...
-    ]
+    ],
+    
 };
