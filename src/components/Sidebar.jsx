@@ -15,7 +15,8 @@ function Sidebar({active, setActive}) {
   			>
            {/*contents*/}
           <div className="h-60 w-full flex">
-            <h3 className="m-auto text-6xl">COBRA</h3>
+            <img className="w-96 h-28" alt="" src="img/logo.svg"/>
+            
           </div>
           <ul className="gap-2 font-normal text-lg">
           
