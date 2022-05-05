@@ -44,8 +44,8 @@ const AuctionSwap = () => {
 
 
 
-            <div className="rounded-lg max-w-3xl m-auto md:flex mt-5">
-                <div className="bg-gray-100 rounded-lg p-10 text-slate-800 flex-1 rounded-lg rounded-b-none md:rounded-r-none md:rounded-lg bg-gray-100"> 
+            <div className="rounded-lg max-w-3xl m-auto mt-5">
+                <div className="bg-gray-100 rounded-lg p-10 text-slate-800 flex-1 rounded-lg rounded-b-none bg-gray-100"> 
                     <div className="mb-5">
                         <p className="text-lg text-stone-500">Your Total Purchase Amount</p>
                         <p className="text-4xl font-bold">12833 CBR</p>
@@ -59,7 +59,7 @@ const AuctionSwap = () => {
                         <p className="text-4xl font-bold">6593 CBR</p>
                     </div>
                 </div>
-                <div className="rounded-lg rounded-t-none md:rounded-l-none md:rounded-lg text-2xl cursor-pointer hover:bg-neutral-500 font-medium text-gray-100 flex justify-center items-center p-3 bg-neutral-400">
+                <div className="rounded-lg rounded-t-none text-2xl cursor-pointer hover:bg-neutral-500 font-medium text-gray-100 flex justify-center items-center p-3 bg-neutral-400">
                     <p>CLAIM</p>
                 </div>
             </div>

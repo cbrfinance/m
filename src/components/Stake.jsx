@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {Context} from '../context/Context'
 import Skel from './Skel'
 import Loading from './Loading'
+import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 function Stake({setToastType}) {
 
   
@@ -11,6 +14,7 @@ function Stake({setToastType}) {
   const [indInfo, setIndInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [stakeMenu, setStakeMenu] = useState(true);
+  const [lockedInfo, setlockedInfo] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const {getStakeInfo, stake, unstake, currentAccount, newNet, connectWallet} = React.useContext(Context)
   
@@ -134,15 +138,39 @@ function Stake({setToastType}) {
           <p>Unstaked Balance</p>
           <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.CBRBalance} CBR</p>
         </div>
-        
+
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
-          <p>Staked Balance</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
+          <p>Claimable Amount</p>
+          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.CBRBalance} CBR</p>
         </div>
+
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
-          <p>My round</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.indRound}</p>
+            <div className="flex items-center">
+                <p>Locked Amount</p>
+                <FontAwesomeIcon icon={lockedInfo ? (faChevronUp) : (faChevronDown)} onClick={()=>{setlockedInfo(!lockedInfo)}}className="cursor-pointer ml-1 text-slate-400 hover:text-slate-300"/>
+            </div>
+            <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
         </div>
+
+        {lockedInfo && (<div className="flex w-full max-w-md m-auto p-1">
+            <div className="border-solid border-2 border-l border-gray-400"></div>
+            <div className="flex-1 ml-2 w-full text-sm max-w-md m-auto">
+                <div className="w-full flex justify-between items-center">
+                    <p> Standard Stake <span className="text-stone-500">(2 Round)</span></p>
+                    <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.indRound}</p>
+                </div>
+                <div className="w-full flex justify-between items-center">
+                    <p> Bond <span className="text-stone-500">(4 Round)</span></p>
+                    <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
+                </div>
+                <div className="w-full flex justify-between items-center">
+                    <p> Aunction Swap <span className="text-stone-500">(27 Round)</span></p>
+                    <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
+                </div>
+            </div>
+        </div>)
+        }   
+
         <div className="my-5 border-solid border-1 border-t border-gray-400 w-full max-w-md"></div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Next Reward Amount</p>
