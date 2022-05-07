@@ -1,6 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react';
+import {Context} from '../context/Context'
+import Loading from './Loading'
 
-const AuctionSwap = () => {
+
+const AuctionSwap = ({setToastType}) => {
+    const [stakeAmount, setStakeAmount] = useState()
+    const [loading, setLoading] = useState(false);
+    const {stake} = React.useContext(Context)
+    const onStakeChange = (e) => {
+        setStakeAmount(e.target.value);
+    }
+    const _stake = async () =>
+    {
+        await stake(stakeAmount, 2, setLoading, setToastType);
+        setStakeAmount('');
+    }
     return (
         <div className="p-1">
             <div className="rounded-lg max-w-3xl m-auto md:flex">
@@ -28,6 +42,8 @@ const AuctionSwap = () => {
                             <input 
                                 className="outline-none text-3xl text-gray-600 placeholder-slate-400 bg-gray-100 placeholder-font-light w-1 flex-grow"
                                 type="number"
+                                value={stakeAmount}
+                                onChange={(e) => onStakeChange(e)}
                                 placeholder="0"/>
                             <img className="w-8" alt="" src="https://cryptologos.cc/logos/convex-finance-cvx-logo.svg"/>
                         </div>
@@ -37,8 +53,8 @@ const AuctionSwap = () => {
                         </div>
                     </div>
                 </div>
-                <div className="rounded-lg rounded-t-none md:rounded-l-none md:rounded-lg text-2xl cursor-pointer hover:bg-stone-500 font-medium text-gray-100 flex justify-center items-center p-3 bg-stone-400">
-                    <p>SWAP</p>
+                <div onClick={()=>{_stake()}} className="rounded-lg rounded-t-none md:rounded-l-none md:rounded-lg text-2xl cursor-pointer hover:bg-stone-500 font-medium text-gray-100 flex justify-center items-center p-3 bg-stone-400">
+                    {loading?(<Loading className="m-4"/>) : (<p>SWAP</p>)}
                 </div>
             </div>
 

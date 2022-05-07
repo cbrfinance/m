@@ -29,7 +29,7 @@ function Stake({setToastType}) {
     }
     const _stake = async () =>
     {
-        await stake(stakeAmount, setLoading, setToastType);
+        await stake(stakeAmount, 0, setLoading, setToastType);
         setStakeAmount('');
         getStakeInfo(setGenInfo, setIndInfo)
     }
@@ -122,7 +122,7 @@ function Stake({setToastType}) {
                         onChange={(e) => onStakeChange(e)}
                         className="outline-none text-xl text-gray-600 placeholder-slate-400 placeholder-font-light bg-gray-300 h-full w-1 flex-grow"
                     />
-					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.rCBRBalance) : setStakeAmount(indInfo.rsCBRBalance)}} className="ml-2 text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
+					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.cbrExactAmount) : setStakeAmount(indInfo.claimableExactAmount)}} className="ml-2 text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
 				</div>
                 {loading?(<Loading className="m-4"/>) : (<div onClick={()=>{stakeMenu? _stake() : _unstake()}} className="text-center transition-all duration-200 hover:bg-slate-500 hover:text-black cursor-pointer bg-slate-400 py-3 px-12 text-white text-lg font-normal mt-4 rounded-lg">
 							{stakeMenu? 'Stake' : 'Unstake'}
@@ -141,7 +141,7 @@ function Stake({setToastType}) {
 
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Claimable Amount</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.CBRBalance} CBR</p>
+          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.claimableAmount} CBR</p>
         </div>
 
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
@@ -149,24 +149,30 @@ function Stake({setToastType}) {
                 <p>Locked Amount</p>
                 <FontAwesomeIcon icon={lockedInfo ? (faChevronUp) : (faChevronDown)} onClick={()=>{setlockedInfo(!lockedInfo)}}className="cursor-pointer ml-1 text-slate-400 hover:text-slate-300"/>
             </div>
-            <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
+            <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmount} sCBR</p>
         </div>
 
         {lockedInfo && (<div className="flex w-full max-w-md m-auto p-1">
             <div className="border-solid border-2 border-l border-gray-400"></div>
             <div className="flex-1 ml-2 w-full text-sm max-w-md m-auto">
-                <div className="w-full flex justify-between items-center">
-                    <p> Standard Stake <span className="text-stone-500">(2 Round)</span></p>
-                    <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.indRound}</p>
-                </div>
-                <div className="w-full flex justify-between items-center">
-                    <p> Bond <span className="text-stone-500">(4 Round)</span></p>
-                    <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
-                </div>
-                <div className="w-full flex justify-between items-center">
-                    <p> Aunction Swap <span className="text-stone-500">(27 Round)</span></p>
-                    <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.sCBRBalance} sCBR</p>
-                </div>
+                {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[0] === '0')&&
+                    (<div className="w-full flex justify-between items-center">
+                        <p> Standard Stake <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[0]} Round)</span></p>
+                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[0]} sCBR</p>
+                    </div>)
+                }
+                {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[1] === '0')&&
+                    (<div className="w-full flex justify-between items-center">
+                        <p> Bond <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[1]} Round)</span></p>
+                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[1]} sCBR</p>
+                    </div>)
+                }   
+                {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[2] === '0')&&
+                    (<div className="w-full flex justify-between items-center">
+                        <p> Auction Swap <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[2]} Round)</span></p>
+                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[2]} sCBR</p>
+                    </div>)
+                }
             </div>
         </div>)
         }   

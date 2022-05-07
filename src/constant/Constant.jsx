@@ -9,7 +9,7 @@
     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
 */
 
-export const stakingContractAddress = '0xA9276ab370D803Bb8e6f35B9Ac3994621c7135Fb'
+export const stakingContractAddress = '0xA7283416429B567aC65c24Df1fCC8D8B20aE601f'
 export const tokenContractAddress = '0x225c04fF96C776B5BC34e26D2Ce994a815355e9C'
 export const bondContractAddress = '0x0eB5a83c3590b29c8F4DBAdDAf0E2C3886eE4861'
 export const KSPAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"
@@ -28,9 +28,21 @@ export const stakingContractABI = [
 				"internalType": "uint256",
 				"name": "amount",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "stakeType",
+				"type": "uint8"
 			}
 		],
 		"name": "stake",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "transferToClaimable",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -68,6 +80,19 @@ export const stakingContractABI = [
 			}
 		],
 		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimableAmount",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -133,14 +158,52 @@ export const stakingContractABI = [
 	},
 	{
 		"inputs": [],
+		"name": "getFrontInd",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[3]",
+				"name": "",
+				"type": "uint256[3]"
+			},
+			{
+				"internalType": "uint256[3]",
+				"name": "",
+				"type": "uint256[3]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getFrontIndInfo",
 		"outputs": [
 			{
 				"components": [
 					{
-						"internalType": "uint256",
+						"internalType": "uint256[3]",
 						"name": "rIndRound",
-						"type": "uint256"
+						"type": "uint256[3]"
 					},
 					{
 						"internalType": "uint256",
@@ -163,7 +226,85 @@ export const stakingContractABI = [
 	},
 	{
 		"inputs": [],
+		"name": "lockedAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lockedAmountInd",
+		"outputs": [
+			{
+				"internalType": "uint256[3]",
+				"name": "",
+				"type": "uint256[3]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "rGonsPerFragment",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "rIndRoundforLocked",
+		"outputs": [
+			{
+				"internalType": "uint256[3]",
+				"name": "",
+				"type": "uint256[3]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "rRound",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "showlastupdateround",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "showRFrac",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -188,8 +329,6 @@ export const stakingContractABI = [
 		"type": "function"
 	}
 ]
-
-
 
 
 

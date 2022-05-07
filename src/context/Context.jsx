@@ -52,7 +52,7 @@ export const Provider = ({ children }) => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
-              console.log(decimals)
+
                 const parsedLPAmount = ethers.utils.parseUnits(lpAmount.toString(), decimals);
                 const parsedCBRUSD = ethers.utils.parseUnits(CBRUSD.toString(), 4);
                 const a = await bondContract.getInputLPValueTokenAmount(address, parsedLPAmount, parsedCBRUSD);
@@ -142,14 +142,13 @@ export const Provider = ({ children }) => {
           console.log("hi")
           setnewNet(true)
     }
-    const stake = async (amount, setLoading, setToastType) => {
+    const stake = async (amount, type, setLoading, setToastType) => {
         try {
             if (ethereum) {
               const stakeContract = createStakeContract();
               const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
-              const stake = await stakeContract.stake(parsedAmount, {
-                gasPrice: 750000000000,
-                gasLimit: 482500
+              const stake = await stakeContract.stake(parsedAmount, type, {
+                gasPrice: 750000000000
             });
             setLoading(true);
             setToastType("submit")
@@ -175,8 +174,7 @@ export const Provider = ({ children }) => {
               const stakeContract = createStakeContract();
               const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
               const unstake = await stakeContract.unstake(parsedAmount, {
-                gasPrice: 750000000000,
-                gasLimit: 482500
+                gasPrice: 750000000000
             });
             setLoading(true);
             setToastType("submit")
@@ -254,11 +252,27 @@ export const Provider = ({ children }) => {
             const a = await stakeGenContract.getFrontGenInfo();
             console.log(a);
             const [_round, _totalSupply, _index, _secondLeft, _rate] = await stakeGenContract.getFrontGenInfo();
-            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), secondToHM : secondsToHms(_secondLeft), secondLeftPercent : parseFloat((100 - (_secondLeft.toNumber()/7200*100)).toFixed(1)), secondLeftPercent0 : parseFloat((100 - (_secondLeft.toNumber()/7200*100)).toFixed(0)), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
+            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), secondToHM : secondsToHms(_secondLeft), secondLeftPercent : parseFloat((100 - (_secondLeft.toNumber()/120*100)).toFixed(1)), secondLeftPercent0 : parseFloat((100 - (_secondLeft.toNumber()/120*100)).toFixed(0)), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
             setGenInfo(genInfo)
-            const [_indRound, _sCBRBalance, _CBRBalance] = await stakeContract.getFrontIndInfo();
-            const indInfo = {indRound : ethers.utils.formatUnits(_indRound, 0), sCBRBalance : convert(_sCBRBalance), CBRBalance : convert(_CBRBalance), rCBRBalance : (+ethers.utils.formatUnits(_CBRBalance, 9)), rsCBRBalance :(+ethers.utils.formatUnits(_sCBRBalance, 9)) }
-            setIndInfo(indInfo)
+            
+            const indInfo = await stakeContract.getFrontInd();
+
+            
+            const indInfoObject = {
+                claimableAmount : convertfinal(indInfo[0], 9, 4), 
+                claimableExactAmount : convertfinal(indInfo[0], 9, 9),
+                lockedAmount : convertfinal(indInfo[1], 9, 4), 
+                lockedAmountArray : [convertfinal(indInfo[2][0], 9, 4), convertfinal(indInfo[2][1], 9, 4), convertfinal(indInfo[2][2], 9, 4)],
+                roundArray : [convertfinal(indInfo[3][0], 0, 0), convertfinal(indInfo[3][1], 0, 0), convertfinal(indInfo[3][2], 0, 0)],
+                cbrAmount : convertfinal(indInfo[4], 9, 4),
+                cbrExactAmount : convertfinal(indInfo[4], 9, 9),
+                scbrAmount : convertfinal(indInfo[5], 9, 4),
+                scbrExactAmount : convertfinal(indInfo[5], 9, 9),
+            }
+            setIndInfo(indInfoObject)
+            console.log(indInfoObject)
+            //const indInfo = {indRound : ethers.utils.formatUnits(_indRound, 0), sCBRBalance : convert(_sCBRBalance), CBRBalance : convert(_CBRBalance), rCBRBalance : (+ethers.utils.formatUnits(_CBRBalance, 9)), rsCBRBalance :(+ethers.utils.formatUnits(_sCBRBalance, 9)) }
+
           } else {
             console.log("Ethereum is not present");
           }

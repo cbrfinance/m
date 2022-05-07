@@ -91,7 +91,7 @@ function Container({ active, setActive }) {
 				<Routes>
 					<Route path="/" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 					<Route path="/Stake" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-                    <Route path="/AuctionSwap" element={<AuctionSwap />} />
+                    <Route path="/AuctionSwap" element={<AuctionSwap showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 					<Route path="/Bond" element={<Bond />} />
 				</Routes>
 
