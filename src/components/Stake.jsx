@@ -136,7 +136,7 @@ function Stake({setToastType}) {
     
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Unstaked Balance</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.CBRBalance} CBR</p>
+          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.cbrAmount} CBR</p>
         </div>
 
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">

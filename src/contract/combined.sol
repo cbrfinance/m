@@ -109,6 +109,15 @@ contract Stake{
         CBR.mint(msg.sender, amount);
         _totalGonSupply -= senderGons;
     }
+
+    function setRoundType(uint8 stake, uint8 bond, uint8 auctionSwap){
+        roundType[0] = stake;
+        roundType[1] = bond;
+        roundType[2] = auctionSwap;
+    }
+    function setStartTime(uint256 time){
+        roundStartTime = time;
+    }
     /********STAKE UNSTAKE REBASE***********/
 
 
