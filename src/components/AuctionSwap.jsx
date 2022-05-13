@@ -15,8 +15,55 @@ const AuctionSwap = ({setToastType}) => {
         await stake(stakeAmount, 2, setLoading, setToastType);
         setStakeAmount('');
     }
+    const progressbar = {
+        width: "27%"
+    }
     return (
+
+
         <div className="p-1">
+
+
+            <div className="flex flex-col items-center m-auto">
+                <div className="flex space-x-2 items-center">
+                    <img className="w-10" alt="" src="img/klaytntrans.png"/>
+                    <img className="w-9" alt="" src="https://cryptologos.cc/logos/convex-finance-cvx-logo.svg"/>
+                </div>
+                <h1 className="text-6xl font-semibold text-stone-600 mb-10 mt-4">KLAY - VTR</h1>
+                
+                <div className="flex flex-col items-center space-y-3 md:flex-row md:items-center md:space-x-7">
+                    <div className="flex flex-col items-center">
+                        <p className="text-gray-100">APY</p>
+                        <p className="text-gray-600 font-semibold text-2xl">26.4%</p>
+                    </div>
+                    <div className="hidden md:block border-solid border-1 border-l h-10 border-stone-500"></div>
+                    <div className="flex flex-col items-center">
+                        <p className="text-gray-100">Total Rewards</p>
+                        <p className="text-gray-600 font-semibold text-2xl">500,00000 VTR</p>
+                    </div>
+                    <div className="hidden md:block border-solid border-1 border-l h-10 border-stone-500"></div>
+                    <div className="flex flex-col items-center">
+                        <p className="text-gray-100">Vesting Period</p>
+                        <p className="text-gray-600 font-semibold text-2xl">30 Days</p>
+                    </div>
+                </div>
+            </div>
+     
+
+            <div className="rounded-lg bg-gray-100 w-full m-auto max-w-3xl mt-14 p-5 mb-5">
+                <div className="flex justify-between w-full">
+                    <p className="text-xl"> <span className="text-stone-500 font-semibold">1341</span><span className="text-gray-500"> KLAY collected</span></p>
+                    <p className="text-gray-500 text-sm">412,5123 KLAY left / 100K KLAY</p>
+                </div>
+
+                <div className="relative h-6 my-4 rounded-full bg-gray-300"> 
+                    <div id="progress" style={progressbar} className="h-6 rounded-full bg-white"></div>
+                    <h4 className="absolute text-center w-full inline h-full inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 font-thin text-slate-600 text-md font-semibold">  
+                        27%
+                    </h4>
+                </div>
+                
+            </div>
             <div className="rounded-lg max-w-3xl m-auto md:flex">
                 <div className="flex-1 rounded-lg rounded-b-none md:rounded-r-none md:rounded-lg bg-gray-100 p-3">
                     <div className="p-3">
@@ -60,25 +107,7 @@ const AuctionSwap = ({setToastType}) => {
 
 
 
-            <div className="rounded-lg max-w-3xl m-auto mt-5">
-                <div className="bg-gray-100 rounded-lg p-10 text-slate-800 flex-1 rounded-lg rounded-b-none bg-gray-100"> 
-                    <div className="mb-5">
-                        <p className="text-lg text-stone-500">Your Total Purchase Amount</p>
-                        <p className="text-4xl font-bold">12833 CBR</p>
-                    </div>
-                    <div className="mb-5">
-                        <p className="text-lg text-stone-500">You already claimed</p>
-                        <p className="text-4xl font-bold">1283 CBR</p>
-                    </div>
-                    <div className="mb-5">
-                        <p className="text-lg text-stone-500">Your Claimable Amount</p>
-                        <p className="text-4xl font-bold">6593 CBR</p>
-                    </div>
-                </div>
-                <div className="rounded-lg rounded-t-none text-2xl cursor-pointer hover:bg-neutral-500 font-medium text-gray-100 flex justify-center items-center p-3 bg-neutral-400">
-                    <p>CLAIM</p>
-                </div>
-            </div>
+            
                 
             
         </div>
