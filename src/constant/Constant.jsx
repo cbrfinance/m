@@ -9,15 +9,53 @@
     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
 */
 
-export const stakingContractAddress = '0xA7283416429B567aC65c24Df1fCC8D8B20aE601f'
+export const stakingContractAddress = '0xd918bb8A865E943e21ddD93FD7A185f4470021B0'
 export const tokenContractAddress = '0x225c04fF96C776B5BC34e26D2Ce994a815355e9C'
 export const bondContractAddress = '0x0eB5a83c3590b29c8F4DBAdDAf0E2C3886eE4861'
+export const auctionSwapContractAddress ='0x9057A3122Bc0493fd4AdC473dfed22faB72A7565'
+
 export const KSPAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"
 
 export const stakingContractABI = [
 	{
 		"inputs": [],
 		"name": "rebase",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "_stake",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_bond",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_auctionSwap",
+				"type": "uint8"
+			}
+		],
+		"name": "setRoundType",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"name": "setStartTime",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -33,11 +71,16 @@ export const stakingContractABI = [
 				"internalType": "uint8",
 				"name": "stakeType",
 				"type": "uint8"
+			},
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			}
 		],
 		"name": "stake",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -685,6 +728,16 @@ export const tokenContractABI = [
 
 
 
+
+
+
+
+
+
+
+
+
+
 export const bondContractABI = [
 	{
 		"inputs": [
@@ -1007,6 +1060,186 @@ export const bondContractABI = [
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+
+
+
+
+
+
+
+
+export const auctionSwapContractABI=[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_stake",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "getFrontGenInfo",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getFrontInfo",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "klay",
+				"type": "uint256"
+			}
+		],
+		"name": "getVTRAmountforExactKlay",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "klayAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "pledge",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "pledgedVTR",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_goal",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint32",
+				"name": "_startAt",
+				"type": "uint32"
+			},
+			{
+				"internalType": "uint32",
+				"name": "_endAt",
+				"type": "uint32"
+			}
+		],
+		"name": "setting",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "showBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "showPercent",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "token",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",

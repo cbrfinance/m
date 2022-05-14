@@ -13,7 +13,7 @@ background: linear-gradient(0deg, rgba(214,208,208,1) 25%, rgba(144,162,167,1) 8
     width: 3em;
     height: 3em;
     animation: spin 1s linear infinite;
-    margin: 20px;
+    margin: 0;
   }
   #firstLoading {
     width: 2.5em;

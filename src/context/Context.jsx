@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import {stakingContractABI, stakingContractAddress, tokenContractAddress, bondContractABI, bondContractAddress, KSPAddress } from "../constant/Constant";
+import {stakingContractABI, stakingContractAddress, tokenContractAddress, bondContractABI, bondContractAddress, auctionSwapContractAddress, auctionSwapContractABI, KSPAddress } from "../constant/Constant";
 
 export const Context = React.createContext();
 
 const { ethereum } = window;
+const gasPrice_ = 250000000000;
+
+
+
 
 const createStakeContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
@@ -142,13 +146,98 @@ export const Provider = ({ children }) => {
           console.log("hi")
           setnewNet(true)
     }
+
+    const getKlayToVTR = async (setVTRAmount, klayAmount) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const ASContract = new ethers.Contract(auctionSwapContractAddress, auctionSwapContractABI, provider);
+                const parsedAmount = ethers.utils.parseUnits(klayAmount.toString(), 18);
+                const VTRAmount = await ASContract.getVTRAmountforExactKlay(parsedAmount);
+                setVTRAmount(convertfinal(VTRAmount, 9, 0))
+
+               
+            }else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+            console.log(error);
+          }
+    }
+
+    
+    const auctionSwap = async (klayAmount, setLoading, setToastType) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const ASContract = new ethers.Contract(auctionSwapContractAddress, auctionSwapContractABI, signer);
+                const parsedAmount = ethers.utils.parseUnits(klayAmount.toString(), 18);
+             
+                const swap = await ASContract.pledge(parsedAmount, { value: parsedAmount, gasPrice : gasPrice_}, );
+                setLoading(true);
+                setToastType("submit")
+                await swap.wait()
+                setLoading(false);
+                setToastType("success")
+    
+    
+    
+                }else {
+                    console.log("Ethereum is not present");
+                  }
+              } catch (error) {
+                console.log("something went wrong!")
+                setLoading(false);
+                setToastType("fail")
+                console.log(error);
+              }
+    }
+   
+    const getAuctionSwapInfo = async (setGenInfo, setIndInfo) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const ASContract = new ethers.Contract(auctionSwapContractAddress, auctionSwapContractABI, provider);
+                const ASgenInfo = await ASContract.getFrontGenInfo();
+                
+                const ASgenInfoObj = {
+                    totalFund : convertfinal(ASgenInfo[0], 18, 0), 
+                    goal : convertfinal(ASgenInfo[1], 18, 0), 
+                    percent : convertfinal(ASgenInfo[2], 16, 0),
+                    klayLeft : +convertfinal(ASgenInfo[1], 18, 0) - +convertfinal(ASgenInfo[0], 18, 0)
+                }
+                console.log(ASgenInfoObj)
+                
+                setGenInfo(ASgenInfoObj)
+                const ASContractForInd = new ethers.Contract(auctionSwapContractAddress, auctionSwapContractABI, signer);
+                const ASIndInfo = await ASContractForInd.getFrontInfo();
+                
+                const ASIndInfoObj = {
+                    klayBalance : convertfinal(ASIndInfo[0], 18, 4),
+                    VTRBalance : convertfinal(ASIndInfo[1], 9, 4)
+                }
+                setIndInfo(ASIndInfoObj)
+                console.log(ASIndInfoObj)
+            }else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+            console.log(error);
+          }
+    }
+
     const stake = async (amount, type, setLoading, setToastType) => {
         try {
             if (ethereum) {
+                const accounts = await ethereum.request({ method: "eth_accounts" });
               const stakeContract = createStakeContract();
               const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
-              const stake = await stakeContract.stake(parsedAmount, type, {
-                gasPrice: 750000000000
+              const stake = await stakeContract.stake(parsedAmount, type, accounts[0], {
+                gasPrice: gasPrice_
             });
             setLoading(true);
             setToastType("submit")
@@ -174,7 +263,7 @@ export const Provider = ({ children }) => {
               const stakeContract = createStakeContract();
               const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
               const unstake = await stakeContract.unstake(parsedAmount, {
-                gasPrice: 750000000000
+                gasPrice: gasPrice_
             });
             setLoading(true);
             setToastType("submit")
@@ -252,7 +341,7 @@ export const Provider = ({ children }) => {
             const a = await stakeGenContract.getFrontGenInfo();
             console.log(a);
             const [_round, _totalSupply, _index, _secondLeft, _rate] = await stakeGenContract.getFrontGenInfo();
-            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), secondToHM : secondsToHms(_secondLeft), secondLeftPercent : parseFloat((100 - (_secondLeft.toNumber()/120*100)).toFixed(1)), secondLeftPercent0 : parseFloat((100 - (_secondLeft.toNumber()/120*100)).toFixed(0)), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
+            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), secondToHM : secondsToHms(_secondLeft), secondLeftPercent : parseFloat((100 - (_secondLeft.toNumber()/28800*100)).toFixed(1)), secondLeftPercent0 : parseFloat((100 - (_secondLeft.toNumber()/28800*100)).toFixed(0)), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
             setGenInfo(genInfo)
             
             const indInfo = await stakeContract.getFrontInd();
@@ -302,6 +391,9 @@ export const Provider = ({ children }) => {
            getKSPValue,
            getLPValueCBRAmount,
            getUserStableLPvalue,
+           getAuctionSwapInfo, 
+           getKlayToVTR,
+           auctionSwap,
           }}
         >
           {children}

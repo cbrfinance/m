@@ -124,7 +124,7 @@ function Stake({setToastType}) {
                     />
 					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.cbrExactAmount) : setStakeAmount(indInfo.claimableExactAmount)}} className="ml-2 text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
 				</div>
-                {loading?(<Loading className="m-4"/>) : (<div onClick={()=>{stakeMenu? _stake() : _unstake()}} className="text-center transition-all duration-200 hover:bg-slate-500 hover:text-black cursor-pointer bg-slate-400 py-3 px-12 text-white text-lg font-normal mt-4 rounded-lg">
+                {loading?(<div className="mt-4"><Loading className="m-4"/></div>) : (<div onClick={()=>{stakeMenu? _stake() : _unstake()}} className="text-center transition-all duration-200 hover:bg-slate-500 hover:text-black cursor-pointer bg-slate-400 py-3 px-12 text-white text-lg font-normal mt-4 rounded-lg">
 							{stakeMenu? 'Stake' : 'Unstake'}
 						</div>)} 
 				

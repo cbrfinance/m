@@ -60,10 +60,12 @@ contract Stake{
 
 
     constructor(address _tokenAddress) {
+        roundStartTime = block.timestamp;
         CBR = TOKEN(_tokenAddress);
         _fragment = INITIAL_FRAGMENTS;
         _gonsPerFragment = TOTAL_GONS/_fragment;
         INDEX = (10**9) * _gonsPerFragment;
+
     }
     //TOTAL_GONS 는 분자 _totalSupply는 분모로 생각하자
     /********STAKE UNSTAKE REBASE***********/
@@ -84,16 +86,16 @@ contract Stake{
     }
 
 
-    function stake(uint256 amount, uint8 stakeType) public {  //type 에 따라 컨트렉 제한걸기
-        require(CBR.balanceOf(msg.sender) >= amount);
+    function stake(uint256 amount, uint8 stakeType, address user) payable public {  //type 에 따라 컨트렉 제한걸기
+        require(CBR.balanceOf(user) >= amount);
         if(lastUpdateRound != rRound()) rebase();
         transferToClaimable();
 
-        CBR.burn(msg.sender, amount);
-        _startRound[msg.sender][stakeType] = rRound();
+        CBR.burn(user, amount);
+        _startRound[user][stakeType] = rRound();
         uint256 senderGons = amountToGons(amount);
-        _gonLockedBalances[msg.sender][stakeType] += senderGons;
-        _totalGon[msg.sender] += senderGons;
+        _gonLockedBalances[user][stakeType] += senderGons;
+        _totalGon[user] += senderGons;
         _totalGonSupply += senderGons;
     }
 
@@ -110,12 +112,12 @@ contract Stake{
         _totalGonSupply -= senderGons;
     }
 
-    function setRoundType(uint8 stake, uint8 bond, uint8 auctionSwap){
-        roundType[0] = stake;
-        roundType[1] = bond;
-        roundType[2] = auctionSwap;
+    function setRoundType(uint8 _stake, uint8 _bond, uint8 _auctionSwap) public{
+        roundType[0] = _stake;
+        roundType[1] = _bond;
+        roundType[2] = _auctionSwap;
     }
-    function setStartTime(uint256 time){
+    function setStartTime(uint256 time) public {
         roundStartTime = time;
     }
     /********STAKE UNSTAKE REBASE***********/
