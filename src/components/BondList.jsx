@@ -63,11 +63,11 @@ function BondList(pair) {
 				</div>
 				<div className="flex justify-between mb-2">
 					<p className="text-gray-400">Price</p>
-					<p>$35.74</p>
+					<p>${bondPriceInfo.price}</p>
 				</div>
 				<div className="flex justify-between mb-2">
 					<p className="text-gray-400">Discount</p>
-					<p>7%</p>
+					<p>{bondPriceInfo.rate}%</p>
 				</div>
 				<div className="flex justify-between mb-2">
 					<p className="text-gray-400">Duration</p>
