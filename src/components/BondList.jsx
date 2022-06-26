@@ -5,10 +5,10 @@ function BondList(pair) {
     const [bondPriceInfo, setBondPriceInfo] = useState({});
     const {getRealTimeDiscountRatePrice} = React.useContext(Context);
 
-
+ 
     useEffect(() => {
         getRealTimeDiscountRatePrice(pair.address, setBondPriceInfo)
-	}, []);
+	}, [getRealTimeDiscountRatePrice, pair.address, bondPriceInfo]);
 
 
 	return (

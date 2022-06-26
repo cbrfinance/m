@@ -35,7 +35,7 @@ function BondModal(pair) {
 		setFirst(true);
         getUserStableLPvalue(pair.decimals, pair.address, setBalanceInfo)
         getRealTimeDiscountRatePrice(pair.address, setBondPriceInfo)
-	}, [getUserStableLPvalue, pair.decimals, pair.address]);
+	}, [getUserStableLPvalue, getRealTimeDiscountRatePrice, pair.address, pair.decimals]);
 	return (
 		<div
 			onClick={e => {
