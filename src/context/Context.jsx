@@ -243,15 +243,18 @@ export const Provider = ({ children }) => {
     const bond = async(address, amount, decimal) => {
         try {
             if (ethereum) {
+
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
                 const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, signer);
+                
                 const parsedAmount = ethers.utils.parseUnits(amount.toString(), decimal);
+                console.log(address)
                 await bondContract.swapExactLPtoToken(address, parsedAmount, {
                     gasPrice: gasPrice_
                 });
             
-
+                
             }
             else {
                 console.log("Ethereum is not present");
