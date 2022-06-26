@@ -17,7 +17,7 @@ function BondModal(pair) {
 
     const _bond = async () =>
     {
-        await bond(pair.address, lpAmount, pair.decimal);
+        await bond(pair.address, lpAmount, pair.decimals);
     }
     const onSlippageChange = (e) => {
         setSlippage(e.target.value);

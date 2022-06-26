@@ -153,6 +153,7 @@ export const Provider = ({ children }) => {
                 const accounts = await ethereum.request({ method: "eth_accounts" });
               const stakeContract = createStakeContract();
               const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
+              console.log(parsedAmount)
               const stake = await stakeContract.stake(parsedAmount, type, accounts[0], {
                 gasPrice: gasPrice_
             });
@@ -249,8 +250,11 @@ export const Provider = ({ children }) => {
                 const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, signer);
                 
                 const parsedAmount = ethers.utils.parseUnits(amount.toString(), decimal);
-                console.log(address)
-                await bondContract.swapExactLPtoToken(address, 961433824523536311, {
+                console.log(amount)
+                console.log(parsedAmount)
+                console.log(decimal)
+            
+                await bondContract.swapExactLPtoToken(address, parsedAmount, {
                     gasPrice: gasPrice_
                 });
             
