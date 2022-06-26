@@ -1,5 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {Context} from '../context/Context'
+
 function BondList(pair) {
+    const [bondPriceInfo, setBondPriceInfo] = useState({});
+    const {getRealTimeDiscountRatePrice} = React.useContext(Context);
+
+
+    useEffect(() => {
+        getRealTimeDiscountRatePrice(pair.address, setBondPriceInfo)
+	}, []);
+
+
 	return (
 		<>
       
@@ -22,12 +33,13 @@ function BondList(pair) {
 						<p>Get LP</p>
 					</div>
 				</div>
-				<h1 className="text-sm flex-1">$50.15</h1>
-				<h1 className="text-sm flex-1">7%</h1>
+				<h1 className="text-sm flex-1">${bondPriceInfo.price}</h1>
+				<h1 className="text-sm flex-1">{bondPriceInfo.rate}%</h1>
 				<h1 className="text-sm flex-1">2days</h1>
 				<div onClick={()=>{pair.setModalPair({address: pair.address, decimals:pair.decimals, token1:pair.token1, token2:pair.token2, token1img:pair.token1img, token2img:pair.token2img}); pair.setActive(!pair.active)}} className="cursor-pointer hover:bg-slate-500 hover:text-black transition-all duration-400 cursor flex-1 bg-slate-400 py-1 px-1 text-white text-md font-normal rounded-lg">
 					Bond
 				</div>
+                
 			</div>
 
 			<div className="text-sm mb-7 md:hidden">

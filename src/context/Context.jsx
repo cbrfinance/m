@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import {stakingContractABI, stakingContractAddress, tokenContractAddress, bondContractABI, bondContractAddress, auctionSwapContractAddress, auctionSwapContractABI, KSPAddress } from "../constant/Constant";
+import {stakingContractABI, stakingContractAddress, tokenContractAddress, bondHelpContractAddress, bondHelpContractABI, bondContractABI, bondContractAddress, auctionSwapContractAddress, auctionSwapContractABI, KSPAddress } from "../constant/Constant";
 
 export const Context = React.createContext();
 
@@ -22,81 +22,71 @@ const createStakeContract = () => {
 export const Provider = ({ children }) => {
     const [currentAccount, setCurrentAccount] = useState("")
     const [newNet, setnewNet] = useState(false);
-    
+
+
+
+
+
+
+
+    /*****************************LIB FUNCTION*******************************/
     const convertfinal = (target, decimal, tofix) => {
         const token = ethers.utils.formatUnits(target, decimal)
         const string = (+token).toFixed(tofix)
         return string;
      }
-
-    const getUserStableLPvalue = async (decimals, address, setBalanceInfo) => {
-        try {
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const signer = provider.getSigner();
-                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, signer);
-                const a = await bondContract.getUserStableLPvalue(address);
-                const balanceInfo = {lpBalance : convertfinal(a[0], decimals, 6), lpBalanceFull : convertfinal(a[0], decimals, decimals), userlpinUSD : convertfinal(a[1], 18, 2)}
-                console.log(balanceInfo);
-                setBalanceInfo(balanceInfo);
-
-            }
-            else {
-                console.log("Ethereum is not present");
-              }
-          } catch (error) {
-            console.log("something went wrong!")
-
-            console.log(error);
-          }
+    const convert = (target) => {
+        const token = ethers.utils.formatUnits(target, 9)
+        const string = (+token).toFixed(4)
+        return string;
     }
     
-    const getLPValueCBRAmount = async (decimals, address, lpAmount, CBRUSD, setCBRAmount, setLPinUSD) => {
-        try {
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
+    function secondsToHms(d) {
+        d = Number(d);
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
 
-                const parsedLPAmount = ethers.utils.parseUnits(lpAmount.toString(), decimals);
-                const parsedCBRUSD = ethers.utils.parseUnits(CBRUSD.toString(), 4);
-                const a = await bondContract.getInputLPValueTokenAmount(address, parsedLPAmount, parsedCBRUSD);
-                console.log(a);
-                const lpinUSD = convertfinal(a[0], 18, 2)
-                const cbrAmount = convertfinal(a[3], 9, 4)
-                setLPinUSD(lpinUSD)
-                setCBRAmount(cbrAmount)
-                
-            }
-            else {
-                console.log("Ethereum is not present");
-              }
-          } catch (error) {
-            console.log("something went wrong!")
+    
+        var hDisplay = h > 0 ? h + (h === 1 ? " hour, " : " hours, ") : "";
+        var mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes ") : "1 minute ";
 
-            console.log(error);
-          }
+        return hDisplay + mDisplay; 
     }
+    /*****************************LIB FUNCTION END*******************************/
 
-    const getKSPValue = async (setKSPPrice) => {
+    /*****************************BASIC SETTING*******************************/
+    const checkIfWalletIsConnect = async () => {
         try {
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
-                const a = await bondContract.getRatioWithToken(KSPAddress);
-                const b = convertfinal(a[0], 18, 4)
-                setKSPPrice(b)
-            }
-            else {
-                console.log("Ethereum is not present");
-              }
-          } catch (error) {
-            console.log("something went wrong!")
-
-            console.log(error);
+          if (!ethereum) return alert("Please install MetaMask.");
+    
+          const accounts = await ethereum.request({ method: "eth_accounts" });
+    
+          if (accounts.length) {
+            setCurrentAccount(accounts[0]);
+    
+          } else {
+            console.log("No accounts found");
           }
-    }
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-    const setCBR = async () => {
+    const connectWallet = async () => {
+        try {
+          if (!ethereum) return alert("Please install MetaMask.");
+    
+          const accounts = await ethereum.request({ method: "eth_requestAccounts", });
+    
+          setCurrentAccount(accounts[0]);
+          window.location.reload();
+        } catch (error) {
+          console.log(error);
+    
+          throw new Error("No ethereum object");
+        }
+      };
+      const setCBR = async () => {
         await window.ethereum.request({
             method: 'wallet_watchAsset',
             params: {
@@ -146,27 +136,224 @@ export const Provider = ({ children }) => {
           console.log("hi")
           setnewNet(true)
     }
+    /*****************************BASIC SETTING END*******************************/
 
-    const getKlayToVTR = async (setVTRAmount, klayAmount) => {
+
+
+
+
+
+
+
+
+    /*****************************STAKE FUNCTION*******************************/
+    const stake = async (amount, type, setLoading, setToastType) => {
         try {
             if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const ASContract = new ethers.Contract(auctionSwapContractAddress, auctionSwapContractABI, provider);
-                const parsedAmount = ethers.utils.parseUnits(klayAmount.toString(), 18);
-                const VTRAmount = await ASContract.getVTRAmountforExactKlay(parsedAmount);
-                setVTRAmount(convertfinal(VTRAmount, 9, 0))
+                const accounts = await ethereum.request({ method: "eth_accounts" });
+              const stakeContract = createStakeContract();
+              const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
+              const stake = await stakeContract.stake(parsedAmount, type, accounts[0], {
+                gasPrice: gasPrice_
+            });
+            setLoading(true);
+            setToastType("submit")
+            await stake.wait()
+            setLoading(false);
+            setToastType("success")
 
-               
+
+
             }else {
                 console.log("Ethereum is not present");
               }
           } catch (error) {
             console.log("something went wrong!")
+            setLoading(false);
+            setToastType("fail")
+            console.log(error);
+          }
+    }
+    const unstake = async (amount, setLoading, setToastType) => {
+        try {
+            if (ethereum) {
+              const stakeContract = createStakeContract();
+              const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
+              const unstake = await stakeContract.unstake(parsedAmount, {
+                gasPrice: gasPrice_
+            });
+            setLoading(true);
+            setToastType("submit")
+            await unstake.wait()
+            setLoading(false);
+            setToastType("success")
+
+          
+
+            }else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            setLoading(false);
+            setToastType("fail")
+            console.log(error);
+          }
+    }
+    const getStakeInfo = async (setGenInfo, setIndInfo) => {
+        try {
+          if (ethereum) {
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const stakeGenContract = new ethers.Contract(stakingContractAddress, stakingContractABI, provider);
+            const stakeContract = createStakeContract();
+            const a = await stakeGenContract.getFrontGenInfo();
+            console.log(a);
+            const [_round, _totalSupply, _index, _secondLeft, _rate] = await stakeGenContract.getFrontGenInfo();
+            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), secondToHM : secondsToHms(_secondLeft), secondLeftPercent : parseFloat((100 - (_secondLeft.toNumber()/28800*100)).toFixed(1)), secondLeftPercent0 : parseFloat((100 - (_secondLeft.toNumber()/28800*100)).toFixed(0)), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
+            setGenInfo(genInfo)
+            
+            const indInfo = await stakeContract.getFrontInd();
+
+            
+            const indInfoObject = {
+                claimableAmount : convertfinal(indInfo[0], 9, 4), 
+                claimableExactAmount : convertfinal(indInfo[0], 9, 9),
+                lockedAmount : convertfinal(indInfo[1], 9, 4), 
+                lockedAmountArray : [convertfinal(indInfo[2][0], 9, 4), convertfinal(indInfo[2][1], 9, 4), convertfinal(indInfo[2][2], 9, 4)],
+                roundArray : [convertfinal(indInfo[3][0], 0, 0), convertfinal(indInfo[3][1], 0, 0), convertfinal(indInfo[3][2], 0, 0)],
+                cbrAmount : convertfinal(indInfo[4], 9, 4),
+                cbrExactAmount : convertfinal(indInfo[4], 9, 9),
+                scbrAmount : convertfinal(indInfo[5], 9, 4),
+                scbrExactAmount : convertfinal(indInfo[5], 9, 9),
+            }
+            setIndInfo(indInfoObject)
+            console.log(indInfoObject)
+            //const indInfo = {indRound : ethers.utils.formatUnits(_indRound, 0), sCBRBalance : convert(_sCBRBalance), CBRBalance : convert(_CBRBalance), rCBRBalance : (+ethers.utils.formatUnits(_CBRBalance, 9)), rsCBRBalance :(+ethers.utils.formatUnits(_sCBRBalance, 9)) }
+
+          } else {
+            console.log("Ethereum is not present");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };  
+    /*****************************STAKE FUNCTION END*******************************/
+
+    /*****************************BOND FUNCTION*******************************/
+
+    const bond = async(address, amount, decimal) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, signer);
+                const parsedAmount = ethers.utils.parseUnits(amount.toString(), decimal);
+                await bondContract.swapExactLPtoToken(address, parsedAmount, {
+                    gasPrice: gasPrice_
+                });
+            
+
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
+    const getRealTimeDiscountRatePrice = async(address, setBondPriceInfo) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum)
+                const bondContract = new ethers.Contract(bondContractAddress, bondContractABI, provider);
+                const _discountRate = await bondContract.realTimeDiscountRate(address);
+                const _discountedPrice = await bondContract.discountedPrice(address);
+
+                const discountRatePrice = { rate : convertfinal(_discountRate, 4, 2), price : convertfinal(_discountedPrice, 4, 4)}
+                setBondPriceInfo(discountRatePrice)
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
+    
+    const getUserStableLPvalue = async (decimals, address, setBalanceInfo) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const bondHelpContract = new ethers.Contract(bondHelpContractAddress, bondHelpContractABI, signer);
+                const a = await bondHelpContract.getUserStableLPvalue(address);
+                const balanceInfo = {lpBalance : convertfinal(a[0], decimals, 6), lpBalanceFull : convertfinal(a[0], decimals, decimals), userlpinUSD : convertfinal(a[1], 18, 2)}
+                console.log(balanceInfo);
+                setBalanceInfo(balanceInfo);
+
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
+    
+    const getLPValueCBRAmount = async (decimals, address, lpAmount, CBRUSD, setCBRAmount, setLPinUSD) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const bondHelpContract = new ethers.Contract(bondHelpContractAddress, bondHelpContractABI, provider);
+
+                const parsedLPAmount = ethers.utils.parseUnits(lpAmount.toString(), decimals);
+                const parsedCBRUSD = ethers.utils.parseUnits(CBRUSD.toString(), 4);
+                const a = await bondHelpContract.getInputLPValueTokenAmount(address, parsedLPAmount, parsedCBRUSD);
+                const lpinUSD = convertfinal(a[0], 18, 2)
+                const cbrAmount = convertfinal(a[3], 9, 4)
+                setLPinUSD(lpinUSD)
+                setCBRAmount(cbrAmount)
+                
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
             console.log(error);
           }
     }
 
-    
+    const getKSPValue = async (setKSPPrice) => {
+        try {
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const bondHelpContract = new ethers.Contract(bondHelpContractAddress, bondHelpContractABI, provider);
+                const a = await bondHelpContract.getRatioWithToken(KSPAddress);
+                const b = convertfinal(a[0], 18, 4)
+                setKSPPrice(b)
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
+
+    /*****************************BOND FUNCTION END*******************************/
+
+
+
+    /*****************************AS FUNCTION*******************************/
     const auctionSwap = async (klayAmount, setLoading, setToastType) => {
         try {
             if (ethereum) {
@@ -230,145 +417,45 @@ export const Provider = ({ children }) => {
           }
     }
 
-    const stake = async (amount, type, setLoading, setToastType) => {
+    const getKlayToVTR = async (setVTRAmount, klayAmount) => {
         try {
             if (ethereum) {
-                const accounts = await ethereum.request({ method: "eth_accounts" });
-              const stakeContract = createStakeContract();
-              const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
-              const stake = await stakeContract.stake(parsedAmount, type, accounts[0], {
-                gasPrice: gasPrice_
-            });
-            setLoading(true);
-            setToastType("submit")
-            await stake.wait()
-            setLoading(false);
-            setToastType("success")
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const ASContract = new ethers.Contract(auctionSwapContractAddress, auctionSwapContractABI, provider);
+                const parsedAmount = ethers.utils.parseUnits(klayAmount.toString(), 18);
+                const VTRAmount = await ASContract.getVTRAmountforExactKlay(parsedAmount);
+                setVTRAmount(convertfinal(VTRAmount, 9, 0))
 
-
-
+               
             }else {
                 console.log("Ethereum is not present");
               }
           } catch (error) {
             console.log("something went wrong!")
-            setLoading(false);
-            setToastType("fail")
             console.log(error);
           }
     }
-    const unstake = async (amount, setLoading, setToastType) => {
-        try {
-            if (ethereum) {
-              const stakeContract = createStakeContract();
-              const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
-              const unstake = await stakeContract.unstake(parsedAmount, {
-                gasPrice: gasPrice_
-            });
-            setLoading(true);
-            setToastType("submit")
-            await unstake.wait()
-            setLoading(false);
-            setToastType("success")
-
-          
-
-            }else {
-                console.log("Ethereum is not present");
-              }
-          } catch (error) {
-            setLoading(false);
-            setToastType("fail")
-            console.log(error);
-          }
-    }
-    const checkIfWalletIsConnect = async () => {
-        try {
-          if (!ethereum) return alert("Please install MetaMask.");
-    
-          const accounts = await ethereum.request({ method: "eth_accounts" });
-    
-          if (accounts.length) {
-            setCurrentAccount(accounts[0]);
-    
-          } else {
-            console.log("No accounts found");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-    const connectWallet = async () => {
-        try {
-          if (!ethereum) return alert("Please install MetaMask.");
-    
-          const accounts = await ethereum.request({ method: "eth_requestAccounts", });
-    
-          setCurrentAccount(accounts[0]);
-          window.location.reload();
-        } catch (error) {
-          console.log(error);
-    
-          throw new Error("No ethereum object");
-        }
-      };
 
 
 
-     function secondsToHms(d) {
-        d = Number(d);
-        var h = Math.floor(d / 3600);
-        var m = Math.floor(d % 3600 / 60);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
-        var hDisplay = h > 0 ? h + (h === 1 ? " hour, " : " hours, ") : "";
-        var mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes ") : "1 minute ";
 
-        return hDisplay + mDisplay; 
-    }
-    const convert = (target) => {
-        const token = ethers.utils.formatUnits(target, 9)
-        const string = (+token).toFixed(4)
-        return string;
-    }
-      const getStakeInfo = async (setGenInfo, setIndInfo) => {
-        try {
-          if (ethereum) {
-            const provider = new ethers.providers.Web3Provider(ethereum);
-            const stakeGenContract = new ethers.Contract(stakingContractAddress, stakingContractABI, provider);
-            const stakeContract = createStakeContract();
-            const a = await stakeGenContract.getFrontGenInfo();
-            console.log(a);
-            const [_round, _totalSupply, _index, _secondLeft, _rate] = await stakeGenContract.getFrontGenInfo();
-            const genInfo = {round : ethers.utils.formatUnits(_round, 0), totalSupply : convert(_totalSupply), index : convert(_index), secondToHM : secondsToHms(_secondLeft), secondLeftPercent : parseFloat((100 - (_secondLeft.toNumber()/28800*100)).toFixed(1)), secondLeftPercent0 : parseFloat((100 - (_secondLeft.toNumber()/28800*100)).toFixed(0)), rate : (_rate.toNumber() - 10000)/100, roi : ((Math.pow((_rate.toNumber()/10000), 5 * 3) - 1) * 100).toFixed(4), apy : ((Math.pow((_rate.toNumber()/10000), 365 * 3) - 1) * 100).toFixed(1)}
-            setGenInfo(genInfo)
-            
-            const indInfo = await stakeContract.getFrontInd();
 
-            
-            const indInfoObject = {
-                claimableAmount : convertfinal(indInfo[0], 9, 4), 
-                claimableExactAmount : convertfinal(indInfo[0], 9, 9),
-                lockedAmount : convertfinal(indInfo[1], 9, 4), 
-                lockedAmountArray : [convertfinal(indInfo[2][0], 9, 4), convertfinal(indInfo[2][1], 9, 4), convertfinal(indInfo[2][2], 9, 4)],
-                roundArray : [convertfinal(indInfo[3][0], 0, 0), convertfinal(indInfo[3][1], 0, 0), convertfinal(indInfo[3][2], 0, 0)],
-                cbrAmount : convertfinal(indInfo[4], 9, 4),
-                cbrExactAmount : convertfinal(indInfo[4], 9, 9),
-                scbrAmount : convertfinal(indInfo[5], 9, 4),
-                scbrExactAmount : convertfinal(indInfo[5], 9, 9),
-            }
-            setIndInfo(indInfoObject)
-            console.log(indInfoObject)
-            //const indInfo = {indRound : ethers.utils.formatUnits(_indRound, 0), sCBRBalance : convert(_sCBRBalance), CBRBalance : convert(_CBRBalance), rCBRBalance : (+ethers.utils.formatUnits(_CBRBalance, 9)), rsCBRBalance :(+ethers.utils.formatUnits(_sCBRBalance, 9)) }
-
-          } else {
-            console.log("Ethereum is not present");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };  
+      
 
 
     useEffect(() => {
@@ -394,6 +481,8 @@ export const Provider = ({ children }) => {
            getAuctionSwapInfo, 
            getKlayToVTR,
            auctionSwap,
+           getRealTimeDiscountRatePrice,
+           bond, 
           }}
         >
           {children}

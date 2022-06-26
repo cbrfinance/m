@@ -39,7 +39,10 @@ background: linear-gradient(0deg, rgba(214,208,208,1) 25%, rgba(144,162,167,1) 8
     }
   }
   
-  
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   @keyframes fill {
     25%,
     50% {

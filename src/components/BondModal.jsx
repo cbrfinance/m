@@ -11,15 +11,21 @@ function BondModal(pair) {
     const [CBRAmount, setCBRAmount] = useState();
     const [balanceInfo, setBalanceInfo] = useState({});
     const [lpinUSD, setLPinUSD] = useState();
-    const {connectWallet, currentAccount, getLPValueCBRAmount, getUserStableLPvalue} = React.useContext(Context);
+    const {connectWallet, currentAccount, getLPValueCBRAmount, getUserStableLPvalue, getRealTimeDiscountRatePrice, bond} = React.useContext(Context);
+    const [bondPriceInfo, setBondPriceInfo] = useState({});
 
+
+    const _bond = async () =>
+    {
+        await bond(pair.address, lpAmount, pair.decimal);
+    }
     const onSlippageChange = (e) => {
         setSlippage(e.target.value);
     }
     const onLPAmountChange = (e) => {
         setlpAmount(e.target.value);
         if(e.target.value === ''){setLPinUSD(''); setCBRAmount('');}
-        getLPValueCBRAmount(pair.decimals, pair.address, e.target.value, pair.KSPPrice, setCBRAmount, setLPinUSD);
+        getLPValueCBRAmount(pair.decimals, pair.address, e.target.value, bondPriceInfo.price, setCBRAmount, setLPinUSD);
     }
     const onCBRAmountChange = (e) => {
         setCBRAmount(e.target.value);
@@ -28,6 +34,7 @@ function BondModal(pair) {
 	useEffect(() => {
 		setFirst(true);
         getUserStableLPvalue(pair.decimals, pair.address, setBalanceInfo)
+        getRealTimeDiscountRatePrice(pair.address, setBondPriceInfo)
 	}, [getUserStableLPvalue, pair.decimals, pair.address]);
 	return (
 		<div
@@ -112,7 +119,7 @@ function BondModal(pair) {
                         <div className="w-full flex justify-around">
                             <div>
                                 <p className="text-lg text-gray-500">Bond Price</p>
-                                <p className="text-center text-2xl font-bold">$3.24</p>
+                                <p className="text-center text-2xl font-bold">${bondPriceInfo.price}</p>
                             </div>
                             <div>
                                 <div>
@@ -154,8 +161,12 @@ function BondModal(pair) {
                                     onChange={(e) => onCBRAmountChange(e)}
                                     className="outline-none placeholder-slate-700 text-gray-600 bg-gray-200 h-full w-1 flex-grow"
                                 />
-                                <p className="pl-2 text-sm text-gray-600 bg-gray-200">SCBR</p>
+                                <p className="pl-2 text-sm text-gray-600 bg-gray-200">sVTR</p>
                             </div>
+                            
+                        </div>
+                        <div onClick={()=>{_bond()}} className=" mt-4 cursor-pointer hover:bg-slate-500  hover:text-black transition-all duration-400 text-center bg-slate-400 py-2 px-10 text-white text-lg font-normal rounded-lg">
+                                Bond
                         </div>
                         <div className="flex flex-col space-y-2 w-full p-4 text-sm">
                             <div className="flex justify-center text-lg">
@@ -175,12 +186,12 @@ function BondModal(pair) {
                             <div className="flex justify-between">
                                 <p>You Will Get</p>
                                 <p>
-                                    {CBRAmount} <span className="text-gray-500">sCBR</span>
+                                    {CBRAmount} <span className="text-gray-500">sVTR</span>
                                 </p>
                             </div>
                             <div className="flex justify-between">
                                 <p>Discount</p>
-                                <p>2.4 <span className="text-gray-500">%</span></p>
+                                <p>{bondPriceInfo.rate} <span className="text-gray-500">%</span></p>
                             </div>
                             <div className="flex justify-between">
                                 <p>Duration</p>

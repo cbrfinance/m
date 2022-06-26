@@ -11,7 +11,7 @@ contract CrowdFund {
     uint256 goal;
     uint256 startAt;
     uint256 endAt;
-    uint256 VTRPriceinKLAY = 30*(2**112);
+    uint256 VTRPriceinKLAY = 173076561951160920951016544307337;
     address owner = 0x544A9c2bDAb38145261c968b025Dc4daf1820b5A;  //나중에 바꿔야함
 
     mapping(address => uint) public pledgedVTR;

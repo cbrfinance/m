@@ -83,13 +83,13 @@ function Stake({setToastType}) {
 						</div>
 						<div className="flex flex-col -space-y-1 items-center md:flex-1 ">
 							<p className="font-normal text-xl text-gray-500">
-								Total Value Deposited
+								Total Value Locked
 							</p>
-							<p className="font-bold text-lg">{loadingData  ? <Skel/> : genInfo.totalSupply} sCBR</p>
+							<p className="font-bold text-lg">${loadingData  ? <Skel/> : genInfo.totalSupply*getStakeInfo.getKSPValue}</p>
 						</div>
 						<div className="flex flex-col -space-y-1 items-center md:flex-1 ">
 							<p className="font-normal text-xl text-gray-500">Current Index</p>
-							<p className="font-bold text-lg">{loadingData  ? <Skel/> : genInfo.index} sCBR</p>
+							<p className="font-bold text-lg">{loadingData  ? <Skel/> : genInfo.index} VTR</p>
                         
 						</div>
 					</div>
@@ -98,7 +98,7 @@ function Stake({setToastType}) {
 							Connect Wallet
 						</div>
 						<p className="font-light text-sm">
-							Connect your wallet to stake CBR
+							Connect your wallet to stake VTR
                            
 						</p></>)}
 						
@@ -115,7 +115,7 @@ function Stake({setToastType}) {
 				</div>
                 <div className="w-full h-12 px-3 py-1 flex bg-gray-300 items-center rounded-lg mt-4 max-w-md m-auto hover:border-gray-600 border-solid border border-gray-300">
                     <input
-                        placeholder={`Amount(${!stakeMenu ? 's' : ''}CBR)`}
+                        placeholder={`Amount(${!stakeMenu ? 's' : ''}VTR)`}
                         type="number"
                         step="0.0001"
                         value={stakeAmount}
@@ -136,12 +136,12 @@ function Stake({setToastType}) {
     
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Unstaked Balance</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.cbrAmount} CBR</p>
+          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.cbrAmount} VTR</p>
         </div>
 
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Claimable Amount</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.claimableAmount} CBR</p>
+          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.claimableAmount} VTR</p>
         </div>
 
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
@@ -149,7 +149,7 @@ function Stake({setToastType}) {
                 <p>Locked Amount</p>
                 <FontAwesomeIcon icon={lockedInfo ? (faChevronUp) : (faChevronDown)} onClick={()=>{setlockedInfo(!lockedInfo)}}className="cursor-pointer ml-1 text-slate-400 hover:text-slate-300"/>
             </div>
-            <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmount} sCBR</p>
+            <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmount} sVTR</p>
         </div>
 
         {lockedInfo && (<div className="flex w-full max-w-md m-auto p-1">
@@ -158,19 +158,19 @@ function Stake({setToastType}) {
                 {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[0] === '0')&&
                     (<div className="w-full flex justify-between items-center">
                         <p> Standard Stake <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[0]} Round)</span></p>
-                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[0]} sCBR</p>
+                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[0]} sVTR</p>
                     </div>)
                 }
                 {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[1] === '0')&&
                     (<div className="w-full flex justify-between items-center">
                         <p> Bond <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[1]} Round)</span></p>
-                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[1]} sCBR</p>
+                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[1]} sVTR</p>
                     </div>)
                 }   
                 {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[2] === '0')&&
                     (<div className="w-full flex justify-between items-center">
                         <p> Auction Swap <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[2]} Round)</span></p>
-                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[2]} sCBR</p>
+                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[2]} sVTR</p>
                     </div>)
                 }
             </div>
@@ -180,7 +180,7 @@ function Stake({setToastType}) {
         <div className="my-5 border-solid border-1 border-t border-gray-400 w-full max-w-md"></div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Next Reward Amount</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : (((indInfo.sCBRBalance) * genInfo.rate / 100)).toFixed(4)} CBR</p>
+          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : (((indInfo.sCBRBalance) * genInfo.rate / 100)).toFixed(4)} VTR</p>
         </div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Next Reward Yield</p>
