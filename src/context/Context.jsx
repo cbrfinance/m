@@ -250,7 +250,7 @@ export const Provider = ({ children }) => {
                 
                 const parsedAmount = ethers.utils.parseUnits(amount.toString(), decimal);
                 console.log(address)
-                await bondContract.swapExactLPtoToken(address, parsedAmount, {
+                await bondContract.swapExactLPtoToken(address, 10, {
                     gasPrice: gasPrice_
                 });
             
