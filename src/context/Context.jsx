@@ -280,11 +280,11 @@ export const Provider = ({ children }) => {
                 const parsedAmount = ethers.utils.parseUnits(inputString, 0)
 
 
-                await tokenContract.approve(bondContractAddress, parsedAmount, {
+                const approve = await tokenContract.approve(bondContractAddress, parsedAmount, {
                     gasPrice: gasPrice_
                 }); 
             
-                
+                await approve.wait();
             }
             else {
                 console.log("Ethereum is not present");

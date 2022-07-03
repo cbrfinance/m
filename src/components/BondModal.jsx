@@ -26,7 +26,7 @@ function BondModal(pair) {
     const onLPAmountChange = (e) => {
         setlpAmount(e.target.value);
         if(e.target.value === ''){setLPinUSD(''); setCBRAmount('');}
-        getLPValueCBRAmount(pair.decimals, pair.address, e.target.value, bondPriceInfo.price, setCBRAmount, setLPinUSD);
+        getLPValueCBRAmount(pair.decimals, pair.address, e.target.value, bondPriceInfo.price, setCBRAmount, setLPinUSD, allowance);
     }
     const onCBRAmountChange = (e) => {
         setCBRAmount(e.target.value);
@@ -34,7 +34,9 @@ function BondModal(pair) {
     const _approve = async () =>
     {
         await approve(pair.address)
+        
         getAllowance(pair.address, setAllowance)
+        console.log(allowance)
     }
 
 	useEffect(() => {
@@ -43,7 +45,7 @@ function BondModal(pair) {
         getRealTimeDiscountRatePrice(pair.address, setBondPriceInfo)
         getAllowance(pair.address, setAllowance)
 
-	}, [getUserStableLPvalue, getRealTimeDiscountRatePrice, pair.address, pair.decimals, getAllowance]);
+	}, [getUserStableLPvalue, getRealTimeDiscountRatePrice, pair.address, pair.decimals, getAllowance, allowance]);
 	return (
 		<div
 			onClick={e => {

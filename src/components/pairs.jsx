@@ -22,5 +22,5 @@ const pairs = [
       token2:"KDAI",
       token1img:"https://cryptologos.cc/logos/tether-usdt-logo.svg",    token2img:"https://cryptologos.cc/logos/multi-collateral-dai-dai-logo.svg"
     }
-  ]
+  ] //0xc320066b25b731a11767834839fe57f9b2186f84
   export default pairs
