@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import {stakingContractABI, stakingContractAddress, tokenContractAddress, bondHelpContractAddress, bondHelpContractABI, bondContractABI, bondContractAddress, auctionSwapContractAddress, auctionSwapContractABI, KSPAddress } from "../constant/Constant";
+import {stakingContractABI, stakingContractAddress, tokenContractAddress, tokenContractABI, bondHelpContractAddress, bondHelpContractABI, bondContractABI, bondContractAddress, auctionSwapContractAddress, auctionSwapContractABI, KSPAddress } from "../constant/Constant";
 
 export const Context = React.createContext();
 
@@ -151,10 +151,10 @@ export const Provider = ({ children }) => {
         try {
             if (ethereum) {
                 const accounts = await ethereum.request({ method: "eth_accounts" });
-              const stakeContract = createStakeContract();
-              const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
-              console.log(parsedAmount)
-              const stake = await stakeContract.stake(parsedAmount, type, accounts[0], {
+                const stakeContract = createStakeContract();
+                const parsedAmount = ethers.utils.parseUnits(amount.toString(), 9);
+                console.log(parsedAmount)
+                const stake = await stakeContract.stake(parsedAmount, type, accounts[0], {
                 gasPrice: gasPrice_
             });
             setLoading(true);
@@ -268,6 +268,45 @@ export const Provider = ({ children }) => {
 
             console.log(error);
           }
+    }
+    const approve = async (address) => {
+        try {
+            if (ethereum) {
+
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const tokenContract = new ethers.Contract(address, tokenContractABI, signer);
+                const inputString = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+                const parsedAmount = ethers.utils.parseUnits(inputString, 0)
+
+
+                await tokenContract.approve(bondContractAddress, parsedAmount, {
+                    gasPrice: gasPrice_
+                }); 
+            
+                
+            }
+            else {
+                console.log("Ethereum is not present");
+              }
+          } catch (error) {
+            console.log("something went wrong!")
+
+            console.log(error);
+          }
+    }
+    const getAllowance = async(address, setAllowance) => {
+        const accounts = await ethereum.request({ method: "eth_accounts" });
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const tokenContract = new ethers.Contract(address, tokenContractABI, signer);
+        const allowance = await tokenContract.allowance(accounts[0], bondContractAddress);
+        const bignum = "15792089237316195423570985008687907853269984665640564039457584007913129639935"
+        const parsedAmount = ethers.utils.parseUnits(bignum, 0)
+        console.log(allowance)
+        console.log(parsedAmount)
+        setAllowance(allowance.gt(parsedAmount))
+
     }
     const getRealTimeDiscountRatePrice = async(address, setBondPriceInfo) => {
         try {
@@ -490,6 +529,8 @@ export const Provider = ({ children }) => {
            auctionSwap,
            getRealTimeDiscountRatePrice,
            bond, 
+           approve, 
+           getAllowance, 
           }}
         >
           {children}

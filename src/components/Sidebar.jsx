@@ -1,9 +1,9 @@
 import React  from 'react';
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useHref} from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import{faBolt, faBook, faRightLeft} from "@fortawesome/free-solid-svg-icons";
+import{faBolt, faBook, faRightLeft, faCircleUser} from "@fortawesome/free-solid-svg-icons";
 import {faChartBar, faClone, faGem} from "@fortawesome/free-regular-svg-icons";
-import {faTwitter, faDiscord, faTelegram} from "@fortawesome/free-brands-svg-icons";
+import {faTwitter, faDiscord, faTelegram, faMedium} from "@fortawesome/free-brands-svg-icons";
 function Sidebar({active, setActive}) {
 
   
@@ -41,34 +41,39 @@ function Sidebar({active, setActive}) {
                 <FontAwesomeIcon icon={faBolt}/>
                 <li>Zap</li>
             </NavLink>
+            <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-3 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-3 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Governance'>
+                <FontAwesomeIcon icon={faCircleUser}/>
+                <li>Governance</li>
+            </NavLink>
           </ul>
            <div className="my-5 border-solid border-1 border-t border-gray-300"></div>
 
 
            <ul className="text-stone-800 gap-2 font-normal text-lg">
-           <Link className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}} to='/Stake'>
+            <useHref className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}}>
                 <FontAwesomeIcon icon={faBook}/>
-                <li>Docs</li>
-            </Link>
-            <Link className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}} to='/Stake'>
+                <a href="https://gitbook.com" target="_blank" rel="noreferrer">Docs</a>
+            </useHref>
+
+            <useHref className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}}>
+                <FontAwesomeIcon icon={faMedium}/>
+                <a href="https://medium.com" target="_blank" rel="noreferrer">Medium</a>
+            </useHref>
+            <useHref className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}}>
                 <FontAwesomeIcon icon={faTwitter}/>
-                <li>Twitter</li>
-            </Link>
-            <Link className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}} to='/Stake'>
+                <a href="https://twitter.com/vector__fi" target="_blank" rel="noreferrer">Twitter</a>
+            </useHref>
+            <useHref className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}}>
                 <FontAwesomeIcon icon={faTelegram}/>
-                <li>Telegram</li>
-            </Link>
-            <Link className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}} to='/Stake'>
+                <a href="https://t.me/vectorfinance_official" target="_blank" rel="noreferrer">Telegram</a>
+            </useHref>
+            <useHref className="flex items-center p-3 space-x-3 hover:bg-gray-200 hover:text-sky-900 rounded-lg" onClick={()=>{setActive(!active)}}>
                 <FontAwesomeIcon icon={faDiscord}/>
-                <li>Discord</li>
-            </Link>
+                <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
+            </useHref>
           
           </ul>
 
-
-           
-            
-          
            {/*contents*/}
          </div>  
       </div>

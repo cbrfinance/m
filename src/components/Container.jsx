@@ -3,12 +3,14 @@ import Stake from './Stake';
 import AuctionSwap from './AuctionSwap'
 import Bond from './Bond';
 import Toast from './Toast';
+import Zap from './Zap'
 import { Routes, Route } from 'react-router-dom';
 import {Context} from '../context/Context'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {faCoins, faBars} from "@fortawesome/free-solid-svg-icons";
 import {} from "@fortawesome/free-regular-svg-icons";
 import '../App.css';
+import Governance from './Governance';
 
 // 받을때 children 객체를 받는다.
 function Container({ active, setActive }) {
@@ -92,7 +94,9 @@ function Container({ active, setActive }) {
 					<Route path="/" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 					<Route path="/Stake" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
                     <Route path="/AuctionSwap" element={<AuctionSwap showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-					<Route path="/Bond" element={<Bond />} />
+					<Route path="/Bond" element={<Bond showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
+                    <Route path="/Zap" element={<Zap showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
+                    <Route path="/Governance" element={<Governance showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 				</Routes>
 
         
@@ -103,3 +107,4 @@ function Container({ active, setActive }) {
 }
 
 export default Container;
+

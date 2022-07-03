@@ -8,10 +8,11 @@ function BondModal(pair) {
     const [setting, setSetting] = useState(false);
     const [slippage, setSlippage] = useState();
     const [lpAmount, setlpAmount] = useState();
+    const [allowance, setAllowance] = useState(false);
     const [CBRAmount, setCBRAmount] = useState();
     const [balanceInfo, setBalanceInfo] = useState({});
     const [lpinUSD, setLPinUSD] = useState();
-    const {connectWallet, currentAccount, getLPValueCBRAmount, getUserStableLPvalue, getRealTimeDiscountRatePrice, bond} = React.useContext(Context);
+    const {connectWallet, currentAccount, getLPValueCBRAmount, getUserStableLPvalue, getRealTimeDiscountRatePrice, bond, approve, getAllowance} = React.useContext(Context);
     const [bondPriceInfo, setBondPriceInfo] = useState({});
 
 
@@ -30,12 +31,19 @@ function BondModal(pair) {
     const onCBRAmountChange = (e) => {
         setCBRAmount(e.target.value);
     }
+    const _approve = async () =>
+    {
+        await approve(pair.address)
+        getAllowance(pair.address, setAllowance)
+    }
 
 	useEffect(() => {
 		setFirst(true);
         getUserStableLPvalue(pair.decimals, pair.address, setBalanceInfo)
         getRealTimeDiscountRatePrice(pair.address, setBondPriceInfo)
-	}, [getUserStableLPvalue, getRealTimeDiscountRatePrice, pair.address, pair.decimals]);
+        getAllowance(pair.address, setAllowance)
+
+	}, [getUserStableLPvalue, getRealTimeDiscountRatePrice, pair.address, pair.decimals, getAllowance]);
 	return (
 		<div
 			onClick={e => {
@@ -165,8 +173,9 @@ function BondModal(pair) {
                             </div>
                             
                         </div>
-                        <div onClick={()=>{_bond()}} className=" mt-4 cursor-pointer hover:bg-slate-500  hover:text-black transition-all duration-400 text-center bg-slate-400 py-2 px-10 text-white text-lg font-normal rounded-lg">
-                                Bond
+                 
+                        <div onClick={()=>{allowance? _bond() : _approve()}} className=" mt-4 cursor-pointer hover:bg-slate-500  hover:text-black transition-all duration-400 text-center bg-slate-400 py-2 px-10 text-white text-lg font-normal rounded-lg">
+                                {allowance? 'Bond' : 'Approve'}
                         </div>
                         <div className="flex flex-col space-y-2 w-full p-4 text-sm">
                             <div className="flex justify-center text-lg">
