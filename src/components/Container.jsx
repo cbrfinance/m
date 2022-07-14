@@ -3,7 +3,8 @@ import Stake from './Stake';
 import AuctionSwap from './AuctionSwap'
 import Bond from './Bond';
 import Toast from './Toast';
-import Zap from './Zap'
+import Zap from './Zap';
+import Dashboard from './Dashboard';
 import { Routes, Route } from 'react-router-dom';
 import {Context} from '../context/Context'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -94,9 +95,10 @@ function Container({ active, setActive }) {
 					<Route path="/" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 					<Route path="/Stake" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
                     <Route path="/AuctionSwap" element={<AuctionSwap showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-					<Route path="/Bond" element={<Bond showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
+					<Route path="/Bond" element={<Bond />} />
                     <Route path="/Zap" element={<Zap showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
                     <Route path="/Governance" element={<Governance showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
+                    <Route path="/Dashboard" element={<Dashboard showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
 				</Routes>
 
         
@@ -107,4 +109,3 @@ function Container({ active, setActive }) {
 }
 
 export default Container;
-

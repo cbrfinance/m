@@ -52,7 +52,7 @@ function Bond() {
 			</div>
 
 			<div
-				className={`bg-gray-100 shadow-lg bg-opacity-50 rounded-lg mt-6 w-full max-w-3xl m-auto p-4 `} 
+				className={`bg-gray-100 shadow-lg bg-opacity-50 rounded-lg mt-6 w-full max-w-3xl m-auto p-4 ${first ? 'scale-100' : 'scale-0'} transition-all duration-700`} 
 			>
 				<h2 className="mb-4 font-extrabold text-lg">Bond (4,4)</h2>
 				<div className="hidden md:flex text-center w-full max-w-2xl mb-7 m-auto">

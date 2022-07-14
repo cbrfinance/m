@@ -4,19 +4,19 @@ import Loading from './Loading'
 
 
 const AuctionSwap = ({ setToastType }) => {
+    const [first, setFirst] = useState(false);
     const [klayAmount, setKlayAmount] = useState()
     const [VTRAmount, setVTRAmount] = useState()
     const [loading, setLoading] = useState(false);
     const [genInfo, setGenInfo] = useState({})
     const [indInfo, setIndInfo] = useState({})
-
     const { getKlayToVTR, getAuctionSwapInfo, auctionSwap } = React.useContext(Context)
-
     const onKlayAmountChange = (e) => {
         if(e.target.value === ''){setKlayAmount(''); setVTRAmount('');}
         setKlayAmount(e.target.value);
         getKlayToVTR(setVTRAmount, e.target.value);
     }
+
     const _auctionSwap = async () =>
     {
         await auctionSwap(klayAmount, setLoading, setToastType);
@@ -24,17 +24,39 @@ const AuctionSwap = ({ setToastType }) => {
         setVTRAmount('');
         getAuctionSwapInfo(setGenInfo, setIndInfo)
     }
+
     const progressbar = {
         width: `${genInfo.percent}%`
     }
     
     useEffect(() => {
+        setFirst(true);
 		getAuctionSwapInfo(setGenInfo, setIndInfo);
 	}, [getAuctionSwapInfo]);
+
     return (
         <div className="p-1">
-            <div className="rounded-lg max-w-3xl m-auto md:flex">
-                <div className="flex-1 rounded-lg rounded-b-none md:rounded-r-none md:rounded-lg bg-gray-100 p-3">
+            
+            <div className="rounded-lg bg-gray-100 w-full m-auto max-w-3xl mt-5 p-3 mb-5">
+            <div className='flex justify-between text-lg w-full m-auto'><h1 className='text-gray-800'>Start/End time:</h1><h1 className='text-black font-semibold'>2022.Jul.24 15:00 (PST) ~ 2022.Jul.25 15:00 (PST)</h1>  </div>
+                <div className="relative h-6 my-4 rounded-full bg-gray-300">
+                        <div id="progress" style={progressbar} className={` ${!genInfo.percent && 'w-0' } h-6 rounded-full bg-white transition-all duration-1000`}></div>
+                        <h4 className="absolute text-center w-full inline h-full inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 font-thin text-slate-600 text-md font-semibold">
+                            {genInfo.percent}%
+                        </h4>
+                    </div>
+                <div className='max-w-lg m-auto'>
+                    <div className="w-full text-sm">
+                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Funds to raise:</h1><h1 className='text-black font-semibold'>1,500,000 KLAY</h1>  </div>
+                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Swap ratio:</h1><h1 className='text-black font-semibold'>1 VTR = 50 KLAY</h1>  </div>
+                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Total sold KLAY:</h1><h1 className='text-black font-semibold'>100 KLAY</h1>  </div>
+                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Status:</h1><h1 className='text-black font-semibold'>{genInfo.klayLeft} KLAY left / {genInfo.goal} KLAY</h1>  </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="rounded-lg max-w-3xl m-auto md:flex-1">
+                <div className="flex-1 rounded-lg rounded-b-none md:rounded-b-none md:rounded-lg bg-gray-100 p-1">
                     <div className="p-3">
                         <p className="text-sm font-semibold text-stone-500 mb-4">From</p>
                         <div className="flex items-center">
@@ -70,36 +92,20 @@ const AuctionSwap = ({ setToastType }) => {
                         </div>
                     </div>
                 </div>
-                <div onClick={()=>{_auctionSwap()}}className="rounded-lg rounded-t-none md:rounded-l-none md:rounded-lg text-sm cursor-pointer hover:bg-stone-500 font-medium text-gray-100 flex justify-center items-center p-3 bg-stone-400">
+                <div onClick={()=>{_auctionSwap()}}className="rounded-lg rounded-t-none md:rounded-t-none md:rounded-lg text-sm cursor-pointer hover:bg-slate-500 hover:text-black font-medium text-gray-100 flex justify-center items-center p-2 bg-slate-400">
                     {loading ? (<Loading className="text-sm"/>) : (<p className="text-lg">Swap</p>)}
                 </div>
             </div>
-            <div className="rounded-lg bg-gray-100 w-full m-auto max-w-3xl mt-14 p-5 mb-5">
-                <div className="w-full">
-                    <p className="text-xl"> <span className="text-stone-500 font-semibold">{genInfo.totalFund}</span><span className="text-gray-500"> KLAY SOLD</span></p>
 
-                </div>
-
-                <div className="relative h-6 my-4 rounded-full bg-gray-300">
-
-                    <div id="progress" style={progressbar} className={` ${!genInfo.percent && 'w-0' } h-6 rounded-full bg-white transition-all duration-1000`}></div>
-                    <h4 className="absolute text-center w-full inline h-full inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 font-thin text-slate-600 text-md font-semibold">
-                        {genInfo.percent}%
-                    </h4>
-                </div>
-                <p className="text-gray-500 text-sm">{genInfo.klayLeft} KLAY left / {genInfo.goal} KLAY</p>
-            </div>
-
-
-            <div className="rounded-lg max-w-3xl m-auto mt-5">
-                <div className="bg-gray-100 rounded-lg p-10 text-slate-800 flex-1 rounded-lg rounded-b-none bg-gray-100">
-                    <div className="mb-5">
+            <div className="rounded-lg max-w-3xl m-auto mt-4">
+                <div className="bg-gray-100 rounded-lg p-4 text-slate-800 flex-1 rounded-lg rounded-b-none bg-gray-100">
+                    <div className="mb-2">
                         <p className="text-lg text-stone-500">Your Total Purchase Amount</p>
-                        <p className="text-4xl font-bold">{indInfo.VTRBalance} VTR</p>
+                        <p className="text-2xl font-bold">{indInfo.VTRBalance} VTR</p>
                     </div>
                 </div>
-                <div className="rounded-lg rounded-t-none text-2xl cursor-pointer hover:bg-neutral-500 font-medium text-gray-100 flex justify-center items-center p-3 bg-neutral-400">
-                    <p>CLAIM</p>
+                <div className="rounded-lg rounded-t-none text-lg cursor-pointer hover:bg-slate-500 hover:text-black font-medium text-gray-100 flex justify-center items-center p-1 bg-slate-400">
+                    <p>Claim</p>
                 </div>
             </div>
         </div>

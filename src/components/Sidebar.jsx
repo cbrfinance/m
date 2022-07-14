@@ -21,7 +21,7 @@ function Sidebar({active, setActive}) {
 
           <ul className="text-stone-800 gap-2 font-normal text-lg">
           
-            <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-3 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-3 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Dashbord'>
+            <NavLink className={({ isActive }) => (isActive ? 'flex items-center p-3 space-x-3 bg-gray-300 rounded-lg' : 'flex items-center p-3 rounded-lg space-x-3 hover:text-sky-900')} onClick={()=>{setActive(!active)}} to='/Dashboard'>
                 <FontAwesomeIcon icon={faChartBar}/>
                 <li>Dashboard</li>
             </NavLink>
