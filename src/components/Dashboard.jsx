@@ -5,7 +5,7 @@ function Dashboard() {
     const [first, setFirst] = useState(false);
     useEffect(() => {
         setFirst(true);
-    });
+    },[]);
     return(
         <div className='p-4'>
             <div className="grid grid-cols-2 gap-2 max-w-3xl m-auto gap-x-6 gap-y-6">

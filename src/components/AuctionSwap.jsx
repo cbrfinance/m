@@ -4,7 +4,6 @@ import Loading from './Loading'
 
 
 const AuctionSwap = ({ setToastType }) => {
-    const [first, setFirst] = useState(false);
     const [klayAmount, setKlayAmount] = useState()
     const [VTRAmount, setVTRAmount] = useState()
     const [loading, setLoading] = useState(false);
@@ -30,7 +29,6 @@ const AuctionSwap = ({ setToastType }) => {
     }
     
     useEffect(() => {
-        setFirst(true);
 		getAuctionSwapInfo(setGenInfo, setIndInfo);
 	}, [getAuctionSwapInfo]);
 

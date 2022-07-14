@@ -5,7 +5,7 @@ function Governance() {
     const [first, setFirst] = useState(false);
     useEffect(() => {
         setFirst(true);
-    });
+    }, []);
     return(
     <div className='p-1'>
         <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 m-auto md:space-x-4 max-w-3xl" >
