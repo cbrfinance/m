@@ -4,12 +4,21 @@ import BondList from './BondList'
 import BondModal from './BondModal'
 import Skel from './Skel'
 import pairs from './pairs';
+import TermsModal from './TermsModal';
+import WalletModal from './WalletModal';
+import KlipModal from './KlipModal';
+
 function Bond() {
 	const [first, setFirst] = useState(false);
     const [active, setActive] = useState(false);
     const [modalPair, setModalPair] = useState({});
     const [KSPPrice, setKSPPrice] = useState();
-    const {getKSPValue} = React.useContext(Context)
+    const {getKSPValue, klipTimer, klipVisible, setKlipVisible} = React.useContext(Context)
+	const [showTermsModal, setShowTermsModal] = useState(false)
+    const handleonClose = () => setShowTermsModal(false)
+    const [showWalletModal, setShowWalletModal] = useState(false)
+    const handleonCloseWallet = () => setShowWalletModal(false)
+
     
 	useEffect(() => {
 		setFirst(true);
@@ -64,7 +73,7 @@ function Bond() {
 				</div>
 
 				{pairs.map(pair => (
-					<BondList
+					<BondList 
             key={pair.token1+pair.token2}
                         address={pair.address}
                         decimals={pair.decimals}
@@ -75,12 +84,17 @@ function Bond() {
                         setModalPair={setModalPair}
                         setActive={setActive}
                         active={active}
+						modal={setShowTermsModal}
 					/>
 				))}
 
        
 			</div>
-       
+			<div>
+			<TermsModal onClose={handleonClose} visible={showTermsModal} walletVisible={setShowWalletModal}/>
+            <WalletModal onCloseWallet={handleonCloseWallet} visible={showWalletModal} klipShow={() => setKlipVisible(true)} /> 
+            <KlipModal onCloseKlip={() => setKlipVisible(false)} visible={klipVisible} countdownTimestampMs={klipTimer} />  
+			</div>
 		</div>
 	);
 }

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Stake from './Stake';
 import AuctionSwap from './AuctionSwap'
 import Bond from './Bond';
-import Toast from './Toast';
 import Zap from './Zap';
 import Dashboard from './Dashboard';
 import { Routes, Route } from 'react-router-dom';
@@ -12,36 +11,44 @@ import {faCoins, faBars} from "@fortawesome/free-solid-svg-icons";
 import {} from "@fortawesome/free-regular-svg-icons";
 import '../App.css';
 import Governance from './Governance';
+import TermsModal from './TermsModal';
+import WalletModal from './WalletModal';
+import KlipModal from './KlipModal';
+import AccountModal from './AccountModal';
+import {ToastContainer} from 'react-toastify';
+import { ThreeDots } from  'react-loader-spinner';
+
 
 // 받을때 children 객체를 받는다.
 function Container({ active, setActive }) {
-    const {connectWallet, currentAccount, setCBR, setsCBR} = React.useContext(Context)
+    const {setCBR, setsCBR, klipTimer, klipVisible, setKlipVisible, loader} = React.useContext(Context)
     const [userName, setUserName] = React.useState()
-    const [showToast, setShowToast] = useState(true)
-    const [toastType, setToastType] = useState("welcome")
     const [tokenMenu, setTokenMenu] = useState(false)
- 
-    
+    const [showTermsModal, setShowTermsModal] = useState(false)
+    const handleonClose = () => setShowTermsModal(false)
+    const [showWalletModal, setShowWalletModal] = useState(false)
+    const handleonCloseWallet = () => setShowWalletModal(false)
+    const [showAccountModal, setShowAccountModal] = useState(false)
+    const handleonCloseAccount = () => setShowAccountModal(false)
+    const address = localStorage.getItem('address');
+    const wallet = localStorage.getItem('wallet');
 
     useEffect(() => {
-        if (currentAccount) {
-              setUserName(
-                `${currentAccount.slice(0, 7)}...${currentAccount.slice(38)}`,
-              )
-      }}, [currentAccount])
+        if (address !== null) {
+        setUserName(`${address.slice(0, 7)}...${address.slice(38)}`,)}
+        },[address])
 
-
-	return (
-		<div onClick={e => {e.stopPropagation();}} id="container" className="fixed z-20 overflow-hidden inset-0 pt-14 md:pt-20 w-full h-full bg-green-100 md:relative md:w-0 md:flex-grow">
-      
-			{/*navbar*/}
-			<div className="fixed flex inset-0 justify-between items-center font-light inset-0 z-10 h-14 md:h-20 w-screen bg-white bg-transparent p-2 md:p-6">
-				<div
-					onClick={() => {
-						setActive(!active);
-					}}
-					className="bg-slate-50 shadow-lg bg-opacity-50 lg:invisible lg-cursor-pointer flex items-center justify-center hover:bg-slate-200 w-10 h-10 rounded-md"
-				>
+    return (
+        <div onClick={e => {e.stopPropagation();}} id="container" className="fixed z-20 overflow-hidden inset-0 pt-14 md:pt-20 w-full h-full bg-green-100 md:relative md:w-0 md:flex-grow">
+    
+            {/*navbar*/}
+            <div className="fixed flex justify-between items-center font-light inset-0 z-10 h-14 md:h-20 w-screen bg-white bg-transparent p-2 md:p-6">
+                <div
+                    onClick={() => {
+                        setActive(!active);
+                    }}
+                    className="bg-slate-50 shadow-lg bg-opacity-50 lg:invisible lg-cursor-pointer flex items-center justify-center hover:bg-slate-200 w-10 h-10 rounded-md"
+                >
                     <FontAwesomeIcon className="text-xl" icon={faBars}/>
                 </div>
                 <div className="flex space-x-2 items-center">
@@ -64,48 +71,70 @@ function Container({ active, setActive }) {
                                     <p className="text-base font-normal">Add sCBR</p>
                                 </div>
                             </div>
-                            <div>
-                                
-                            </div>
-
-                        </div>
-                        
+                        </div>                        
                     </div>
-                    {currentAccount ? (<div onClick={() => {
-                            setShowToast(!showToast);
-                        }} className="bg-slate-50 rounded-md p-2 px-4 flex items-center space-x-2 px font-normal text-gray-700 text-s shadow-lg bg-opacity-50">
+                    <div>
+                        {wallet === 'mm' && <div onClick={() => {
+                            setShowAccountModal(true)
+                        }} className="hover:bg-slate-300 cursor-pointer bg-slate-50  rounded-md p-2 px-4 flex items-center space-x-2 px font-normal text-gray-700 text-s shadow-lg bg-opacity-50">
                         <img className="w-6 h-6" alt="" src="img/metamask.svg"/><p>{userName}</p>
-                    </div>) : (<div onClick={() => {
-                            connectWallet();
+                        
+                    </div>}
+                    </div>
+
+                    <div>
+                        {wallet === 'kk' && <div onClick={() => {
+                            setShowAccountModal(true)
+                        }}  className="hover:bg-slate-300 cursor-pointer bg-slate-50  rounded-md p-2 px-4 flex items-center space-x-2 px font-normal text-gray-700 text-s shadow-lg bg-opacity-50">
+                        <img className="w-6 h-6" alt="" src="img/kaikas.svg"/><p>{userName}</p>
+                    </div>}
+                    </div>
+
+                    <div>
+                        {wallet === 'kl' && <div onClick={() => {
+                            setShowAccountModal(true)
+                        }}  className="hover:bg-slate-300 cursor-pointer bg-slate-50  rounded-md p-2 px-4 flex items-center space-x-2 px font-normal text-gray-700 text-s shadow-lg bg-opacity-50">
+                        <img className="w-6 h-6" alt="" src="img/klip.svg"/><p>{userName}</p>
+                    </div>}
+                    </div>
+
+                    <div>
+                        {wallet === null && <div onClick={() => {
+                            setShowTermsModal(true);
                         }} className="hover:bg-slate-300 cursor-pointer flex items-center space-x-2 h-10 rounded-md p-2 bg-slate-50 shadow-lg font-normal text-s bg-opacity-50">
-                        <img className="w-10" alt="" src="img/wallet3.svg"/>
-                    </div>)}
-                                    
+                        <img className="w-10" alt="" src="img/wallet3.svg"/><p>Connect Wallet</p>
+                    </div>}
+                    </div>
                 </div>
-				
-			</div>
-			{/*navbar*/}
-
-			<div
-				id="content"
-				className="px-3 absolute bg-transparent overflow-auto h-full pb-14 md:pb-20 w-full"
-			>
+            </div>
+            
+            {/*navbar*/}
+            <div
+                id="content"
+                className="px-3 absolute bg-transparent overflow-auto h-full pb-14 md:pb-20 w-full"
+            >
         
-				<Routes>
-					<Route path="/" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-					<Route path="/Stake" element={<Stake showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-                    <Route path="/AuctionSwap" element={<AuctionSwap showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-					<Route path="/Bond" element={<Bond />} />
-                    <Route path="/Zap" element={<Zap showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-                    <Route path="/Governance" element={<Governance showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-                    <Route path="/Dashboard" element={<Dashboard showToast={showToast} setShowToast={setShowToast} setToastType={setToastType}/>} />
-				</Routes>
-
-        
-			</div>
-            {<Toast showToast={showToast} toastType={toastType}/>}
-		</div>
-	);
+                <Routes>
+                    <Route path="/" element={<Stake />} />
+                    <Route path="/Stake" element={<Stake />} />
+                    <Route path="/AuctionSwap" element={<AuctionSwap />} />
+                    <Route path="/Bond" element={<Bond />} />
+                    <Route path="/Zap" element={<Zap />} />
+                    <Route path="/Governance" element={<Governance />} />
+                    <Route path="/Dashboard" element={<Dashboard />} />
+                </Routes>        
+            </div>
+            <div>
+            <TermsModal onClose={handleonClose} visible={showTermsModal} walletVisible={setShowWalletModal}/>
+            <WalletModal onCloseWallet={handleonCloseWallet} visible={showWalletModal} klipShow={() => setKlipVisible(true)} /> 
+            <KlipModal onCloseKlip={() => setKlipVisible(false)} visible={klipVisible} countdownTimestampMs={klipTimer} />
+            <AccountModal onClose={handleonCloseAccount} visible={showAccountModal}/>
+            <ToastContainer/>
+            </div>    
+            {loader ? <div className= 'relative top-1/3 w-20 m-auto'>
+                <ThreeDots color='grey' /></div> : <div></div>}
+        </div>
+    );
 }
 
 export default Container;

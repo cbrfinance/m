@@ -4,7 +4,6 @@ import Container from './components/Container'
 import {Provider} from './context/Context'
 import './App.css';
 
-
 function App() {
 	const [active, setActive] = useState(false);
     const [firstLoading, setFirstLoading] = useState(true);

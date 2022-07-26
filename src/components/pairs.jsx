@@ -16,7 +16,7 @@ const pairs = [
       token1img:"img/klaytntrans.png",    token2img:"https://cryptologos.cc/logos/ethereum-eth-logo.svg"
     },
     {
-      address:"0xe9ddb7a6994bd9cdf97cf11774a72894597d878b",
+      address:"0xc320066b25b731a11767834839fe57f9b2186f84",
       decimals: 6, 
       token1:"oUSDT",
       token2:"KDAI",

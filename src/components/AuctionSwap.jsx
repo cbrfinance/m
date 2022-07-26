@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Context } from '../context/Context'
-import Loading from './Loading'
+import KlipModal from './KlipModal'
 
-
-const AuctionSwap = ({ setToastType }) => {
+const AuctionSwap = () => {
     const [klayAmount, setKlayAmount] = useState()
     const [VTRAmount, setVTRAmount] = useState()
-    const [loading, setLoading] = useState(false);
     const [genInfo, setGenInfo] = useState({})
     const [indInfo, setIndInfo] = useState({})
-    const { getKlayToVTR, getAuctionSwapInfo, auctionSwap } = React.useContext(Context)
+    const { getKlayToVTR, getAuctionSwapInfo, auctionSwap, klipVisible, klipTimer, setKlipVisible} = React.useContext(Context)
+
     const onKlayAmountChange = (e) => {
         if(e.target.value === ''){setKlayAmount(''); setVTRAmount('');}
         setKlayAmount(e.target.value);
@@ -18,7 +17,7 @@ const AuctionSwap = ({ setToastType }) => {
 
     const _auctionSwap = async () =>
     {
-        await auctionSwap(klayAmount, setLoading, setToastType);
+        await auctionSwap(klayAmount);
         setKlayAmount('');
         setVTRAmount('');
         getAuctionSwapInfo(setGenInfo, setIndInfo)
@@ -29,12 +28,13 @@ const AuctionSwap = ({ setToastType }) => {
     }
     
     useEffect(() => {
-		getAuctionSwapInfo(setGenInfo, setIndInfo);
+
+    getAuctionSwapInfo(setGenInfo, setIndInfo);
+
 	}, [getAuctionSwapInfo]);
 
     return (
-        <div className="p-1">
-            
+        <div className="p-1"> 
             <div className="rounded-lg bg-gray-100 w-full m-auto max-w-3xl mt-5 p-3 mb-5">
             <div className='flex justify-between text-lg w-full m-auto'><h1 className='text-gray-800'>Start/End time:</h1><h1 className='text-black font-semibold'>2022.Jul.24 15:00 (PST) ~ 2022.Jul.25 15:00 (PST)</h1>  </div>
                 <div className="relative h-6 my-4 rounded-full bg-gray-300">
@@ -45,9 +45,9 @@ const AuctionSwap = ({ setToastType }) => {
                     </div>
                 <div className='max-w-lg m-auto'>
                     <div className="w-full text-sm">
-                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Funds to raise:</h1><h1 className='text-black font-semibold'>1,500,000 KLAY</h1>  </div>
-                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Swap ratio:</h1><h1 className='text-black font-semibold'>1 VTR = 50 KLAY</h1>  </div>
-                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Total sold KLAY:</h1><h1 className='text-black font-semibold'>100 KLAY</h1>  </div>
+                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Funds to raise:</h1><h1 className='text-black font-semibold'>{genInfo.goal} KLAY</h1>  </div>
+                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Swap ratio:</h1><h1 className='text-black font-semibold'>1 VTR = 0.1 KLAY</h1>  </div>
+                        <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Total sold KLAY:</h1><h1 className='text-black font-semibold'>{genInfo.totalFund} KLAY</h1>  </div>
                         <div className='flex justify-between  m-auto'><h1 className='text-gray-500'>Status:</h1><h1 className='text-black font-semibold'>{genInfo.klayLeft} KLAY left / {genInfo.goal} KLAY</h1>  </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@ const AuctionSwap = ({ setToastType }) => {
                     </div>
                 </div>
                 <div onClick={()=>{_auctionSwap()}}className="rounded-lg rounded-t-none md:rounded-t-none md:rounded-lg text-sm cursor-pointer hover:bg-slate-500 hover:text-black font-medium text-gray-100 flex justify-center items-center p-2 bg-slate-400">
-                    {loading ? (<Loading className="text-sm"/>) : (<p className="text-lg">Swap</p>)}
+                    <p className="text-lg">Swap</p>
                 </div>
             </div>
 
@@ -106,6 +106,7 @@ const AuctionSwap = ({ setToastType }) => {
                     <p>Claim</p>
                 </div>
             </div>
+            <KlipModal onCloseKlip={() => setKlipVisible(false)} visible={klipVisible} countdownTimestampMs={klipTimer} />  
         </div>
     )
 }

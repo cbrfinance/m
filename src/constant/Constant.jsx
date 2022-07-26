@@ -9,11 +9,14 @@
     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
 */
 
+
 export const stakingContractAddress = '0x3B85987a6459ebCDF2092402ba2E6C6b47647f58'
 export const tokenContractAddress = '0xc384924b2FaED0D8243cB90Dc3B6E427421cfDe7'
 export const bondHelpContractAddress = '0xc02DBAc48af645bD84C85560868D731f034E1867'
 export const bondContractAddress = '0x9831064C43987B8eB6D375Edb6Ff23015A78f377'
-export const auctionSwapContractAddress ='0x9057A3122Bc0493fd4AdC473dfed22faB72A7565'
+export const auctionSwapContractAddress ='0x2374F4938C32B74CefEAB0A412Af822B17Ef4F51'
+export const zapContractAddress = '0x3Def50A4eb1C49BC0803693F1d9ce173Beb1b610'
+export const zeroAddress = '0x0000000000000000000000000000000000000000'
 
 export const KSPAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"
 
@@ -373,8 +376,6 @@ export const stakingContractABI = [
 		"type": "function"
 	}
 ]
-
-
 
 
 
@@ -1120,6 +1121,74 @@ export const auctionSwapContractABI=[
 		"type": "constructor"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "klayAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "pledge",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_goal",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint32",
+				"name": "_startAt",
+				"type": "uint32"
+			},
+			{
+				"internalType": "uint32",
+				"name": "_endAt",
+				"type": "uint32"
+			}
+		],
+		"name": "setting",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getFrontGenInfo",
 		"outputs": [
@@ -1144,7 +1213,7 @@ export const auctionSwapContractABI=[
 	},
 	{
 		"inputs": [],
-		"name": "getFrontInfo",
+		"name": "getFrontIndInfo",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1180,16 +1249,16 @@ export const auctionSwapContractABI=[
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "klayAmount",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
-		"name": "pledge",
-		"outputs": [],
-		"stateMutability": "payable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -1209,29 +1278,6 @@ export const auctionSwapContractABI=[
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_goal",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint32",
-				"name": "_startAt",
-				"type": "uint32"
-			},
-			{
-				"internalType": "uint32",
-				"name": "_endAt",
-				"type": "uint32"
-			}
-		],
-		"name": "setting",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1265,12 +1311,134 @@ export const auctionSwapContractABI=[
 		"name": "token",
 		"outputs": [
 			{
-				"internalType": "contract IERC20",
+				"internalType": "contract IKIP7",
 				"name": "",
 				"type": "address"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	}
+]
+export const zapContractABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_factory",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_stake",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_token",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenin",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokeninAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenout",
+				"type": "address"
+			}
+		],
+		"name": "estimatePoswithUSDT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			}
+		],
+		"name": "getUSDTPairAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenA",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountA",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenB",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountB",
+				"type": "uint256"
+			}
+		],
+		"name": "swapthruUSDT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenToReceive",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountToReceive",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "klayAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "swapthruUSDTwithKlay",
+		"outputs": [],
+		"stateMutability": "payable",
 		"type": "function"
 	}
 ]

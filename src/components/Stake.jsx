@@ -1,35 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import {Context} from '../context/Context'
 import Skel from './Skel'
-import Loading from './Loading'
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import TermsModal from './TermsModal';
+import WalletModal from './WalletModal';
+import KlipModal from './KlipModal';
 
-function Stake({setToastType}) {
+function Stake() {
 
-  
-  const [first, setFirst] = useState(false);
-  const [stakeAmount, setStakeAmount] = useState()
-  const [genInfo, setGenInfo] = useState([]);
-  const [indInfo, setIndInfo] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [stakeMenu, setStakeMenu] = useState(true);
-  const [lockedInfo, setlockedInfo] = useState(false);
-  const [loadingData, setLoadingData] = useState(true);
-  const {getStakeInfo, stake, unstake, currentAccount, newNet, connectWallet} = React.useContext(Context)
-  
+    const [first, setFirst] = useState(false);
+    const [stakeAmount, setStakeAmount] = useState()
+    const [genInfo, setGenInfo] = useState([]);
+    const [indInfo, setIndInfo] = useState([]);
+    const [stakeMenu, setStakeMenu] = useState(true);
+    const [lockedInfo, setlockedInfo] = useState(false);
+    const [loadingData, setLoadingData] = useState(true);
+    const {getStakeInfo, stake, unstake, newNet, klipTimer, klipVisible, setKlipVisible} = React.useContext(Context)
+    const [showTermsModal, setShowTermsModal] = useState(false)
+    const handleonClose = () => setShowTermsModal(false)
+    const [showWalletModal, setShowWalletModal] = useState(false)
+    const handleonCloseWallet = () => setShowWalletModal(false)
+    const [showKlipModal, setShowKlipModal] = useState(false)
+    const handleonCloseKlip = () => setShowKlipModal(false)
+
     const onStakeChange = (e) => {
         setStakeAmount(e.target.value);
     }
     const _unstake = async () =>
     {
-        await unstake(stakeAmount, setLoading, setToastType);
+        await unstake(stakeAmount);
         setStakeAmount('');
         getStakeInfo(setGenInfo, setIndInfo)
     }
     const _stake = async () =>
     {
-        await stake(stakeAmount, 0, setLoading, setToastType);
+        await stake(stakeAmount, 0);
         setStakeAmount('');
         getStakeInfo(setGenInfo, setIndInfo)
     }
@@ -94,13 +100,8 @@ function Stake({setToastType}) {
 						</div>
 					</div>
 					<div className="flex flex-col items-center">
-                        {!currentAccount && (<><div onClick={()=>{connectWallet()}} className="cursor-pointer bg-slate-400 hover:bg-slate-500 transition-all duration-200 hover:text-black py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
-							Connect Wallet
-						</div>
-						<p className="font-light text-sm">
-							Connect your wallet to stake VTR
-                           
-						</p></>)}
+                        
+						
 						
                         
 					</div>
@@ -124,24 +125,24 @@ function Stake({setToastType}) {
                     />
 					<p onClick={()=>{stakeMenu ? setStakeAmount(indInfo.cbrExactAmount) : setStakeAmount(indInfo.claimableExactAmount)}} className="ml-2 text-slate-500 hover:text-slate-900 cursor-pointer">Max</p>
 				</div>
-                {loading?(<div className="mt-4"><Loading className="m-4"/></div>) : (<div onClick={()=>{stakeMenu? _stake() : _unstake()}} className="text-center transition-all duration-200 hover:bg-slate-500 hover:text-black cursor-pointer bg-slate-400 py-3 px-12 text-white text-lg font-normal mt-4 rounded-lg">
+                {!(localStorage.getItem('address'))? (<div onClick={()=>{setShowTermsModal(true);}} className="cursor-pointer bg-slate-400 hover:bg-slate-500 transition-all duration-200 hover:text-black py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
+							Connect Wallet
+						</div>) :(<div onClick={()=>{stakeMenu? _stake() : _unstake()}} className="text-center transition-all duration-200 hover:bg-slate-500 hover:text-black cursor-pointer bg-slate-400 py-3 px-12 text-white text-lg font-normal mt-4 rounded-lg">
 							{stakeMenu? 'Stake' : 'Unstake'}
-						</div>)} 
-				
-        
-
+						</div>) }
+                
         
         <div className="my-5 border-solid border-1 border-t border-gray-400 w-full max-w-md"></div>
 
     
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Unstaked Balance</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.cbrAmount} VTR</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.cbrAmount} VTR</p>
         </div>
 
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Claimable Amount</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.claimableAmount} VTR</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.claimableAmount} VTR</p>
         </div>
 
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
@@ -149,28 +150,28 @@ function Stake({setToastType}) {
                 <p>Locked Amount</p>
                 <FontAwesomeIcon icon={lockedInfo ? (faChevronUp) : (faChevronDown)} onClick={()=>{setlockedInfo(!lockedInfo)}}className="cursor-pointer ml-1 text-slate-400 hover:text-slate-300"/>
             </div>
-            <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmount} sVTR</p>
+            <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.lockedAmount} sVTR</p>
         </div>
 
         {lockedInfo && (<div className="flex w-full max-w-md m-auto p-1">
             <div className="border-solid border-2 border-l border-gray-400"></div>
             <div className="flex-1 ml-2 w-full text-sm max-w-md m-auto">
-                {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[0] === '0')&&
+                {loadingData ? <Skel/> : !(indInfo.roundArray[0] === '0')&&
                     (<div className="w-full flex justify-between items-center">
-                        <p> Standard Stake <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[0]} Round)</span></p>
-                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[0]} sVTR</p>
+                        <p> Standard Stake <span className="text-stone-500">({loadingData ? <Skel/> : indInfo.roundArray[0]} Round)</span></p>
+                        <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.lockedAmountArray[0]} sVTR</p>
                     </div>)
                 }
-                {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[1] === '0')&&
+                {loadingData ? <Skel/> : !(indInfo.roundArray[1] === '0')&&
                     (<div className="w-full flex justify-between items-center">
-                        <p> Bond <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[1]} Round)</span></p>
-                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[1]} sVTR</p>
+                        <p> Bond <span className="text-stone-500">({loadingData ? <Skel/> : indInfo.roundArray[1]} Round)</span></p>
+                        <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.lockedAmountArray[1]} sVTR</p>
                     </div>)
                 }   
-                {(loadingData || !currentAccount) ? <Skel/> : !(indInfo.roundArray[2] === '0')&&
+                {loadingData ? <Skel/> : !(indInfo.roundArray[2] === '0')&&
                     (<div className="w-full flex justify-between items-center">
-                        <p> Auction Swap <span className="text-stone-500">({(loadingData || !currentAccount) ? <Skel/> : indInfo.roundArray[2]} Round)</span></p>
-                        <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : indInfo.lockedAmountArray[2]} sVTR</p>
+                        <p> Auction Swap <span className="text-stone-500">({loadingData ? <Skel/> : indInfo.roundArray[2]} Round)</span></p>
+                        <p className="text-gray-500">{loadingData ? <Skel/> : indInfo.lockedAmountArray[2]} sVTR</p>
                     </div>)
                 }
             </div>
@@ -180,18 +181,24 @@ function Stake({setToastType}) {
         <div className="my-5 border-solid border-1 border-t border-gray-400 w-full max-w-md"></div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Next Reward Amount</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : (((indInfo.sCBRBalance) * genInfo.rate / 100)).toFixed(4)} VTR</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : (((indInfo.sCBRBalance) * genInfo.rate / 100)).toFixed(4)} VTR</p>
         </div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>Next Reward Yield</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : genInfo.rate} %</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : genInfo.rate} %</p>
         </div>
         <div className="w-full text-sm flex justify-between items-center max-w-md m-auto">
           <p>ROI (5-Day Rate)</p>
-          <p className="text-gray-500">{(loadingData || !currentAccount) ? <Skel/> : genInfo.roi} %</p>
+          <p className="text-gray-500">{loadingData ? <Skel/> : genInfo.roi} %</p>
         </div>
 			</div>
-		</div>
+            <div>
+            <TermsModal onClose={handleonClose} visible={showTermsModal} walletVisible={setShowWalletModal}/>
+            <WalletModal onCloseWallet={handleonCloseWallet} visible={showWalletModal} klipShow={() => setKlipVisible(true)} /> 
+            <KlipModal onCloseKlip={() => setKlipVisible(false)} visible={klipVisible} countdownTimestampMs={klipTimer} />  
+            </div>
+        </div>
+        
 	);
 }
 export default Stake;

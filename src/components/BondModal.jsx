@@ -12,9 +12,9 @@ function BondModal(pair) {
     const [CBRAmount, setCBRAmount] = useState();
     const [balanceInfo, setBalanceInfo] = useState({});
     const [lpinUSD, setLPinUSD] = useState();
-    const {connectWallet, currentAccount, getLPValueCBRAmount, getUserStableLPvalue, getRealTimeDiscountRatePrice, bond, approve, getAllowance} = React.useContext(Context);
+    const {connectWallet, getLPValueCBRAmount, getUserStableLPvalue, getRealTimeDiscountRatePrice, bond, approve, getAllowance} = React.useContext(Context);
     const [bondPriceInfo, setBondPriceInfo] = useState({});
-
+    const address = localStorage.getItem('address');
 
     const _bond = async () =>
     {
@@ -138,13 +138,7 @@ function BondModal(pair) {
                                 </div>
                             </div>
                         </div>
-                        {!currentAccount && (<><div onClick={()=>{connectWallet()}} className="cursor-pointer bg-slate-400 hover:bg-slate-500 transition-all duration-200 hover:text-black py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
-							Connect Wallet
-						</div>
-						<p className="font-light text-sm">
-							Connect your wallet to bond
-                           
-						</p></>)}
+                        
                         <div className="relative flex flex-col items-center w-full">
                             <div className="mt-4 mb-1 w-full rounded-lg h-14 max-w-sm hover:rounded-md flex items-center text-2xl bg-gray-200 pl-6 hover:border-gray-400 border-solid border border-gray-200">
                                 <input
@@ -175,10 +169,13 @@ function BondModal(pair) {
                             </div>
                             
                         </div>
-                 
-                        <div onClick={()=>{allowance? _bond() : _approve()}} className=" mt-4 cursor-pointer hover:bg-slate-500  hover:text-black transition-all duration-400 text-center bg-slate-400 py-2 px-10 text-white text-lg font-normal rounded-lg">
-                                {allowance? 'Bond' : 'Approve'}
-                        </div>
+                        {!(address) ? (<div onClick={()=>{connectWallet()}} className="cursor-pointer bg-slate-400 hover:bg-slate-500 transition-all duration-200 hover:text-black py-3 px-12 text-white text-lg font-normal m-4 rounded-lg">
+							Connect Wallet
+						</div>
+						) : (<div onClick={()=>{allowance? _bond() : _approve()}} className=" mt-4 cursor-pointer hover:bg-slate-500  hover:text-black transition-all duration-400 text-center bg-slate-400 py-2 px-10 text-white text-lg font-normal rounded-lg">
+                        {allowance? 'Bond' : 'Approve'}
+                        </div>)}
+                        
                         <div className="flex flex-col space-y-2 w-full p-4 text-sm">
                             <div className="flex justify-center text-lg">
                                 <p>{lpAmount} <span className="text-gray-500">LP</span> = {lpinUSD} <span className="text-gray-500">USD</span></p>
