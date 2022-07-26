@@ -12,7 +12,7 @@ const Zap = () => {
 
     const [allowance, setAllowance] = useState(false);
     
-    const {zapEstimate, getAllowance, approve, zap} = React.useContext(Context);
+    const {zapEstimate, zap_getAllowance, zap_approve, zap} = React.useContext(Context);
     const onTokenInAmountChange = (e) => {
         setTokenInAmount(e.target.value);
         if(e.target.value === ''){setTokenInAmount(''); setTokenOutAmount('');}
@@ -21,8 +21,8 @@ const Zap = () => {
 
     const _approve = async () =>
     {
-        await approve(selectedTokenInfo.address)
-        getAllowance(selectedTokenInfo.address, setAllowance)
+        await zap_approve(selectedTokenInfo.address)
+        zap_getAllowance(selectedTokenInfo.address, setAllowance)
         console.log(allowance)
     }
 
@@ -33,9 +33,9 @@ const Zap = () => {
 
     useEffect(() => {
 		
-        getAllowance(selectedTokenInfo.address, setAllowance)
+        zap_getAllowance(selectedTokenInfo.address, setAllowance)
 
-	}, [selectedTokenInfo, allowance, getAllowance]);
+	}, [selectedTokenInfo, allowance, zap_getAllowance]);
 
     return (
         <div className="p-1 flex space-y-4 flex-col">

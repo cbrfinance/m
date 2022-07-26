@@ -1046,6 +1046,154 @@ const zap = async (decimals, addressIn, tokenInAmount) => {
 }
 
 
+const zap_approve = async (address) => {
+  try {
+      if (wallet==='mm') {
+
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const tokenContract = new ethers.Contract(address, tokenContractABI, signer);
+          const inputString = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+          const parsedAmount = ethers.utils.parseUnits(inputString, 0)
+          const approve = await tokenContract.approve(zapContractAddress, parsedAmount, {
+              gasPrice: gasPrice_
+          }); 
+          toast.info('Transaction has been submitted.');
+          setLoader(true);
+          await approve.wait();
+          toast.success('Transaction successful!');
+          setLoader(false);
+      }
+    } catch (error) {
+      console.log("something went wrong!")
+      console.log(error);
+      toast.error('Transaction failed.');
+      setLoader(false);
+    }
+      try {
+        if (wallet==='kk') {
+            const caver = new Caver(klaytn);
+            const tokenContract = caver.contract.create(tokenContractABI, address);
+            const inputString = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+            const parsedAmount = ethers.utils.parseUnits(inputString, 0)
+            const approve = await caver.klay.sendTransaction({
+              type: 'SMART_CONTRACT_EXECUTION',
+              from: account,
+              to: address,
+              data: tokenContract.methods.approve(zapContractAddress, parsedAmount).encodeABI(),
+              gas: '300000',
+            })
+            .on('transactionHash', (hash) => {toast.info('Transaction has been submitted.'); setLoader(true);
+            })
+            .on('receipt', (receipt) => {toast.success('Transaction successful!'); setLoader(false);
+              // success
+            })
+            .on('error', (e) => {toast.error('Transaction failed.'); setLoader(false);
+              // failed
+            });
+            }
+          } catch (error) {
+            setLoader(false);
+            console.log("something went wrong!")
+            console.log(error);
+          }
+
+      try {
+        const inputString = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+        const parsedAmount = ethers.utils.parseUnits(inputString, 0)
+        if (wallet==='kl') {
+            setKlipVisible(true);
+            const {request_key} = await prepare.executeContract({
+              bappName: 'Vector Finance',
+              to: address,
+              value: '0',
+              abi: JSON.stringify({
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_spender",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "approve",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }),
+              params: `["${bondContractAddress}","${parsedAmount.toString()}"]`
+            });
+            console.log(request_key)
+            setKlipTimer(dayjs()+300000);
+            setKlipRequest(request_key); 
+            console.log(request_key)
+            var counter = 0;
+            const looper = setInterval(async() => {
+              counter ++;
+              const res = await getResult(request_key);
+              if (res.status === 'completed') {clearInterval(looper); setKlipVisible(false); toast.success('Transaction successful!')} 
+              if (counter>300) {clearInterval(looper); setKlipVisible(false);}
+          }, 1000);
+            }
+          } catch (error) {
+            setKlipVisible(false); 
+            toast.error('Transaction failed.');
+            console.log("something went wrong!")
+            console.log(error);
+          }
+}
+const zap_getAllowance = async(address, setAllowance) => {
+if (wallet==='mm') {
+  const accounts = await ethereum.request({ method: "eth_accounts" });
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const tokenContract = new ethers.Contract(address, tokenContractABI, signer);
+  const allowance = await tokenContract.allowance(accounts[0], bondContractAddress);
+  const bignum = "15792089237316195423570985008687907853269984665640564039457584007913129639935"
+  const parsedAmount = ethers.utils.parseUnits(bignum, 0)
+  console.log(allowance)
+  console.log(parsedAmount)
+  setAllowance(allowance.gt(parsedAmount))
+}
+
+if (wallet==='kk') {
+  const tokenContract = new caver.contract(tokenContractABI, address);
+  const method = await tokenContract.methods.allowance(account, bondContractAddress).call({
+    from: account,
+  });
+  const allowance = caver.utils.BigNumber(method);
+  const bignum = "15792089237316195423570985008687907853269984665640564039457584007913129639935"
+  const parsedAmount = ethers.utils.parseUnits(bignum, 0)
+  console.log(allowance)
+  console.log(parsedAmount)
+  setAllowance(allowance.gt(parsedAmount))
+}
+
+if (wallet==='kl') {
+  const tokenContract = new caver.contract(tokenContractABI, address);
+  const method = await tokenContract.methods.allowance(account, bondContractAddress).call({
+    from: account,
+  });
+  const allowance = caver.utils.BigNumber(method);
+  const bignum = "15792089237316195423570985008687907853269984665640564039457584007913129639935";
+  const parsedAmount = caver.utils.BigNumber(bignum);
+  console.log(allowance)
+  console.log(parsedAmount)
+  setAllowance(allowance.gt(parsedAmount))
+}
+
+}
+
+
     /* kaikas */    
     const connectWalletKlay = async () => {
       try {
@@ -1108,6 +1256,8 @@ const zap = async (decimals, addressIn, tokenInAmount) => {
            bond, 
            approve, 
            getAllowance, 
+           zap_approve, 
+           zap_getAllowance,
            zapEstimate,
            zap,
            connectWalletKlay,
